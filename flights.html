@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flights – Voyage</title>
+  <meta name="description" content="Search and book the best domestic and international flights from India with Voyage.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { poppins: ['Inter','sans-serif'], volkhov: ['Outfit','sans-serif'] } } }
+    }
+  </script>
+  <style>body{margin:0;padding:0;overflow-x:hidden}</style>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+      .blob {
+        position: absolute;
+        filter: blur(80px);
+        z-index: -2;
+        opacity: 0.6;
+        animation: float 10s ease-in-out infinite alternate;
+      }
+      @keyframes float {
+        0% { transform: translateY(0) scale(1); }
+        100% { transform: translateY(-30px) scale(1.1); }
+      }
+    </style>
+  <link rel="stylesheet" href="voyage.css">
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-white to-orange-50/40 text-slate-800 antialiased">
+  <!-- Background orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+
+    <div class="blob bg-orange-300 w-[500px] h-[500px] rounded-full top-[-100px] right-[-100px] mix-blend-multiply"></div>
+    <div class="blob bg-indigo-300 w-[400px] h-[400px] rounded-full top-[30vh] left-[-150px] mix-blend-multiply" style="animation-delay: 2s;"></div>
+    <div class="blob bg-pink-300 w-[600px] h-[600px] rounded-full bottom-[-200px] right-[10vw] mix-blend-multiply" style="animation-delay: 4s;"></div>
+
+
+<!-- NAV -->
+<header class="mat-navbar sticky top-0 z-50">
+  <div class="p-5 sm:px-16 sm:py-4 flex items-center justify-between max-w-[90rem] mx-auto font-poppins">
+    <a href="index.html" class="text-[#181E4B] font-volkhov font-bold text-3xl">Voyage.</a>
+    <nav class="hidden lg:flex items-center space-x-10">
+      <a href="about.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">About</a>
+      <a href="destinations.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Destinations</a>
+      <a href="hotels.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Hotels</a>
+      <a href="flights.html" class="text-orange-500 font-semibold border-b-2 border-orange-400 pb-0.5">Flights</a>
+      <a href="bookings.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Bookings</a>
+      <a href="login.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Login</a>
+      <a href="signup.html" class="mat-btn mat-btn-outlined">Signup</a>
+    </nav>
+    <button id="mob-btn" class="lg:hidden flex flex-col gap-1.5 p-2">
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+    </button>
+  </div>
+  <div id="mob-menu" class="hidden lg:hidden bg-white border-t px-6 py-4 space-y-3 font-poppins">
+    <a href="destinations.html" class="block text-slate-700 hover:text-orange-500">Destinations</a>
+    <a href="hotels.html" class="block text-slate-700 hover:text-orange-500">Hotels</a>
+    <a href="flights.html" class="block text-orange-500 font-semibold">Flights</a>
+    <a href="bookings.html" class="block text-slate-700 hover:text-orange-500">Bookings</a>
+    <a href="login.html" class="block text-slate-700 hover:text-orange-500">Login</a>
+    <a href="signup.html" class="block font-medium border-2 border-slate-800 rounded-xl px-4 py-2 text-center">Signup</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section data-aos="fade-up" class="relative bg-gradient-to-r from-sky-900 to-blue-500 py-24 px-6 sm:px-16 text-white overflow-hidden">
+  <div class="absolute inset-0 opacity-20" style="background:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22><path d=%22M0,200 Q150,50 300,200 Q450,350 600,200%22 fill=%22none%22 stroke=%22white%22 stroke-width=%221%22/></svg>');background-size:600px"></div>
+  <div class="relative z-10 max-w-2xl">
+    <p class="text-sky-300 font-semibold uppercase tracking-widest text-sm mb-3">✈️ Fly Across India</p>
+    <h1 class="font-volkhov text-5xl sm:text-6xl font-bold leading-tight mb-4">Find Best Flights</h1>
+    <p class="text-white/80 text-lg">Search all major Indian airlines — IndiGo, Air India, Vistara and more. Fly smarter with Voyage.</p>
+  </div>
+</section>
+
+<!-- FLIGHT SEARCH -->
+<section data-aos="fade-up" class="px-6 sm:px-20 -mt-8 relative z-10">
+  <div class="hero-search glass-xl p-6 max-w-5xl mx-auto">
+    <div class="flex gap-4 mb-5 font-poppins">
+      <label class="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
+        <input type="radio" name="trip" checked class="accent-orange-500"> One Way
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
+        <input type="radio" name="trip" class="accent-orange-500"> Round Trip
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
+        <input type="radio" name="trip" class="accent-orange-500"> Multi-City
+      </label>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="col-span-1 sm:col-span-2 lg:col-span-1">
+        <label class="block text-xs text-slate-500 font-poppins mb-1 font-medium uppercase tracking-wide">From</label>
+        <input type="text" placeholder="Delhi (DEL)" class="mat-input">
+      </div>
+      <div class="col-span-1 sm:col-span-2 lg:col-span-1">
+        <label class="block text-xs text-slate-500 font-poppins mb-1 font-medium uppercase tracking-wide">To</label>
+        <input type="text" placeholder="Goa (GOI)" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-700 outline-none focus:border-orange-400 transition-colors">
+      </div>
+      <div>
+        <label class="block text-xs text-slate-500 font-poppins mb-1 font-medium uppercase tracking-wide">Departure</label>
+        <input type="date" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-600 outline-none focus:border-orange-400 transition-colors">
+      </div>
+      <div>
+        <label class="block text-xs text-slate-500 font-poppins mb-1 font-medium uppercase tracking-wide">Passengers</label>
+        <select class="w-full border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-700 outline-none focus:border-orange-400 transition-colors bg-white">
+          <option>1 Adult</option>
+          <option>2 Adults</option>
+          <option>3 Adults</option>
+          <option>4+ Adults</option>
+        </select>
+      </div>
+    </div>
+    <div class="mt-5 text-right">
+      <a href="bookings.html" class="mat-btn mat-btn-primary ripple">Search Flights</a>
+    </div>
+  </div>
+</section>
+
+<!-- POPULAR ROUTES -->
+<section data-aos="fade-up" class="p-6 sm:p-20 pt-14">
+  <div class="text-center mb-12">
+    <p class="uppercase font-semibold text-gray-500 text-sm tracking-widest mb-2">🇮🇳 Best Deals</p>
+    <h2 class="font-volkhov font-bold text-4xl sm:text-5xl text-[#181E4B]">Popular Indian Routes</h2>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- DEL → GOI -->
+    <div class="bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
+      <div class="flex items-center justify-between mb-6">
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800 font-volkhov">DEL</p>
+          <p class="text-slate-500 text-sm">New Delhi</p>
+        </div>
+        <div class="flex-1 mx-4 flex items-center gap-1">
+          <div class="flex-1 h-px bg-slate-200"></div>
+          <span class="text-2xl">✈️</span>
+          <div class="flex-1 h-px bg-slate-200"></div>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800 font-volkhov">GOI</p>
+          <p class="text-slate-500 text-sm">Goa</p>
+        </div>
+      </div>
+      <div class="flex justify-between items-center border-t border-slate-100 pt-4">
+        <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">2h 30min</p></div>
+        <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹3,500</p></div>
+        <a href="bookings.html" class="mat-btn mat-btn-primary ripple">Book</a>
+      </div>
+    </div>
+
+    <!-- BOM → CCU -->
+    <div class="bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
+      <div class="flex items-center justify-between mb-6">
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800 font-volkhov">BOM</p>
+          <p class="text-slate-500 text-sm">Mumbai</p>
+        </div>
+        <div class="flex-1 mx-4 flex items-center gap-1">
+          <div class="flex-1 h-px bg-slate-200"></div>
+          <span class="text-2xl">✈️</span>
+          <div class="flex-1 h-px bg-slate-200"></div>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800 font-volkhov">CCU</p>
+          <p class="text-slate-500 text-sm">Kolkata</p>
+        </div>
+      </div>
+      <div class="flex justify-between items-center border-t border-slate-100 pt-4">
+        <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">2h 15min</p></div>
+        <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹4,200</p></div>
+        <a href="bookings.html" class="mat-btn mat-btn-primary ripple">Book</a>
+      </div>
+    </div>
+
+    <!-- BLR → DEL -->
+    <div class="bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
+      <div class="flex items-center justify-between mb-6">
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800 font-volkhov">BLR</p>
+          <p class="text-slate-500 text-sm">Bangalore</p>
+        </div>
+        <div class="flex-1 mx-4 flex items-center gap-1">
+          <div class="flex-1 h-px bg-slate-200"></div>
+          <span class="text-2xl">✈️</span>
+          <div class="flex-1 h-px bg-slate-200"></div>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800 font-volkhov">DEL</p>
+          <p class="text-slate-500 text-sm">New Delhi</p>
+        </div>
+      </div>
+      <div class="flex justify-between items-center border-t border-slate-100 pt-4">
+        <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">2h 45min</p></div>
+        <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹3,800</p></div>
+        <a href="bookings.html" class="mat-btn mat-btn-primary ripple">Book</a>
+      </div>
+    </div>
+
+    <!-- DEL → IXB (Andaman via Port Blair) -->
+    <div class="bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
+      <div class="flex items-center justify-between mb-6">
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800 font-volkhov">DEL</p>
+          <p class="text-slate-500 text-sm">New Delhi</p>
+        </div>
+        <div class="flex-1 mx-4 flex items-center gap-1">
+          <div class="flex-1 h-px bg-slate-200"></div>
+          <span class="text-2xl">✈️</span>
+          <div class="flex-1 h-px bg-slate-200"></div>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800 font-volkhov">IXZ</p>
+          <p class="text-slate-500 text-sm">Andaman</p>
+        </div>
+      </div>
+      <div class="flex justify-between items-center border-t border-slate-100 pt-4">
+        <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">3h 45min</p></div>
+        <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹8,500</p></div>
+        <a href="bookings.html" class="mat-btn mat-btn-primary ripple">Book</a>
+      </div>
+    </div>
+
+    <!-- MAA → COK -->
+    <div class="bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
+      <div class="flex items-center justify-between mb-6">
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800 font-volkhov">MAA</p>
+          <p class="text-slate-500 text-sm">Chennai</p>
+        </div>
+        <div class="flex-1 mx-4 flex items-center gap-1">
+          <div class="flex-1 h-px bg-slate-200"></div>
+          <span class="text-2xl">✈️</span>
+          <div class="flex-1 h-px bg-slate-200"></div>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800 font-volkhov">COK</p>
+          <p class="text-slate-500 text-sm">Kochi</p>
+        </div>
+      </div>
+      <div class="flex justify-between items-center border-t border-slate-100 pt-4">
+        <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">1h 15min</p></div>
+        <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹2,800</p></div>
+        <a href="bookings.html" class="mat-btn mat-btn-primary ripple">Book</a>
+      </div>
+    </div>
+
+    <!-- BOM → JAI -->
+    <div class="bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
+      <div class="flex items-center justify-between mb-6">
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800 font-volkhov">BOM</p>
+          <p class="text-slate-500 text-sm">Mumbai</p>
+        </div>
+        <div class="flex-1 mx-4 flex items-center gap-1">
+          <div class="flex-1 h-px bg-slate-200"></div>
+          <span class="text-2xl">✈️</span>
+          <div class="flex-1 h-px bg-slate-200"></div>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-slate-800 font-volkhov">JAI</p>
+          <p class="text-slate-500 text-sm">Jaipur</p>
+        </div>
+      </div>
+      <div class="flex justify-between items-center border-t border-slate-100 pt-4">
+        <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">1h 45min</p></div>
+        <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹3,200</p></div>
+        <a href="bookings.html" class="mat-btn mat-btn-primary ripple">Book</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="text-center py-8 text-sm text-slate-500 font-poppins border-t border-slate-100">
+  © 2024 Voyage. All rights reserved. Made with 🥰
+</footer>
+
+<script>
+  document.getElementById('mob-btn').addEventListener('click', () => {
+    document.getElementById('mob-menu').classList.toggle('hidden');
+  });
+</script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100,
+      });
+    </script>
+
+  <!-- FAB back-to-top -->
+  <button id="back-to-top" class="mat-fab" aria-label="Back to top" title="Back to top">↑</button>
+
+
+  <script>
+    const fab = document.getElementById('back-to-top');
+    if(fab) {
+      window.addEventListener('scroll', () => {
+        if(window.scrollY > 400) fab.classList.add('visible');
+        else fab.classList.remove('visible');
+        // navbar elevation
+        const nav = document.querySelector('.mat-navbar, header');
+        if(nav) nav.classList.toggle('scrolled', window.scrollY > 10);
+      });
+      fab.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
+  </script>
+
+</body>
+
+</html>

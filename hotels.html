@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotels – Voyage</title>
+  <meta name="description" content="Find the best hotels across India with Voyage. Luxury stays, palace hotels and boutique escapes.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { poppins: ['Inter','sans-serif'], volkhov: ['Outfit','sans-serif'] } } }
+    }
+  </script>
+  <style>body{margin:0;padding:0;overflow-x:hidden}</style>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+      .blob {
+        position: absolute;
+        filter: blur(80px);
+        z-index: -2;
+        opacity: 0.6;
+        animation: float 10s ease-in-out infinite alternate;
+      }
+      @keyframes float {
+        0% { transform: translateY(0) scale(1); }
+        100% { transform: translateY(-30px) scale(1.1); }
+      }
+    </style>
+  <link rel="stylesheet" href="voyage.css">
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-white to-orange-50/40 text-slate-800 antialiased">
+  <!-- Background orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+
+    <div class="blob bg-orange-300 w-[500px] h-[500px] rounded-full top-[-100px] right-[-100px] mix-blend-multiply"></div>
+    <div class="blob bg-indigo-300 w-[400px] h-[400px] rounded-full top-[30vh] left-[-150px] mix-blend-multiply" style="animation-delay: 2s;"></div>
+    <div class="blob bg-pink-300 w-[600px] h-[600px] rounded-full bottom-[-200px] right-[10vw] mix-blend-multiply" style="animation-delay: 4s;"></div>
+
+
+<!-- NAV -->
+<header class="mat-navbar sticky top-0 z-50">
+  <div class="p-5 sm:px-16 sm:py-4 flex items-center justify-between max-w-[90rem] mx-auto font-poppins">
+    <a href="index.html" class="text-[#181E4B] font-volkhov font-bold text-3xl">Voyage.</a>
+    <nav class="hidden lg:flex items-center space-x-10">
+      <a href="about.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">About</a>
+      <a href="destinations.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Destinations</a>
+      <a href="hotels.html" class="text-orange-500 font-semibold border-b-2 border-orange-400 pb-0.5">Hotels</a>
+      <a href="flights.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Flights</a>
+      <a href="bookings.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Bookings</a>
+      <a href="login.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Login</a>
+      <a href="signup.html" class="mat-btn mat-btn-outlined">Signup</a>
+    </nav>
+    <button id="mob-btn" class="lg:hidden flex flex-col gap-1.5 p-2">
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+    </button>
+  </div>
+  <div id="mob-menu" class="hidden lg:hidden bg-white border-t px-6 py-4 space-y-3 font-poppins">
+    <a href="destinations.html" class="block text-slate-700 hover:text-orange-500">Destinations</a>
+    <a href="hotels.html" class="block text-orange-500 font-semibold">Hotels</a>
+    <a href="flights.html" class="block text-slate-700 hover:text-orange-500">Flights</a>
+    <a href="bookings.html" class="block text-slate-700 hover:text-orange-500">Bookings</a>
+    <a href="login.html" class="block text-slate-700 hover:text-orange-500">Login</a>
+    <a href="signup.html" class="block font-medium border-2 border-slate-800 rounded-xl px-4 py-2 text-center">Signup</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section data-aos="fade-up" class="relative bg-gradient-to-r from-indigo-900 to-violet-600 py-24 px-6 sm:px-16 text-white overflow-hidden">
+  <div class="absolute inset-0 opacity-10" style="background:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22><circle cx=%22200%22 cy=%22200%22 r=%22180%22 fill=%22none%22 stroke=%22white%22 stroke-width=%220.5%22/></svg>');background-size:300px"></div>
+  <div class="relative z-10 max-w-2xl">
+    <p class="text-violet-300 font-semibold uppercase tracking-widest text-sm mb-3">🏨 Stay in Style</p>
+    <h1 class="font-volkhov text-5xl sm:text-6xl font-bold leading-tight mb-4">India's Finest Hotels</h1>
+    <p class="text-white/80 text-lg">From palace hotels in Rajasthan to beachside resorts in Goa — find your perfect Indian stay.</p>
+  </div>
+</section>
+
+<!-- SEARCH BAR -->
+<section data-aos="fade-up" class="px-6 sm:px-20 -mt-8 relative z-10">
+  <div class="hero-search glass-xl p-6 flex flex-col sm:flex-row gap-4 max-w-4xl mx-auto">
+    <input id="dest-input" type="text" placeholder="Where in India are you going?" class="flex-1 border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-700 outline-none focus:border-orange-400 transition-colors">
+    <input type="date" class="border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-600 outline-none focus:border-orange-400 transition-colors">
+    <input type="date" class="border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-600 outline-none focus:border-orange-400 transition-colors">
+    <a href="bookings.html" class="mat-btn mat-btn-primary ripple whitespace-nowrap">Search Hotels</a>
+  </div>
+</section>
+
+<!-- HOTEL CARDS -->
+<section data-aos="fade-up" class="p-6 sm:p-20 pt-12">
+  <div class="text-center mb-12">
+    <p class="uppercase font-semibold text-gray-500 text-sm tracking-widest mb-2">🇮🇳 Top Picks</p>
+    <h2 class="font-volkhov font-bold text-4xl sm:text-5xl text-[#181E4B]">Popular Indian Hotels</h2>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+    <!-- Taj Mahal Palace -->
+    <div data-aos="fade-up" data-aos-delay="300" class="mat-card flex flex-col overflow-hidden cursor-pointer group">
+      <div class="overflow-hidden rounded-t-[2rem] h-56 relative group">
+        <img src="images/103705059.jpg" alt="Taj Mahal Palace" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+      </div>
+      <div class="p-7 space-y-3">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="font-bold text-slate-800 text-lg font-poppins">Taj Mahal Palace</p>
+            <p class="text-slate-500 text-sm">Mumbai, Maharashtra</p>
+          </div>
+          <span class="badge-price">₹25,000/night</span>
+        </div>
+        <div class="flex gap-1 text-amber-400">★★★★★</div>
+        <p class="text-slate-500 text-sm">Iconic heritage hotel by the Gateway of India. Award-winning restaurants, spa and harbour views.</p>
+        <a href="bookings.html" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+      </div>
+    </div>
+
+    <!-- Umaid Bhawan Palace -->
+    <div data-aos="fade-up" data-aos-delay="200" class="mat-card flex flex-col overflow-hidden cursor-pointer group">
+      <div class="overflow-hidden rounded-t-[2rem] h-56 relative group">
+        <img src="images/756523266.jpg" alt="Umaid Bhawan Palace" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+      </div>
+      <div class="p-7 space-y-3">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="font-bold text-slate-800 text-lg font-poppins">Umaid Bhawan Palace</p>
+            <p class="text-slate-500 text-sm">Jodhpur, Rajasthan</p>
+          </div>
+          <span class="badge-price">₹45,000/night</span>
+        </div>
+        <div class="flex gap-1 text-amber-400">★★★★★</div>
+        <p class="text-slate-500 text-sm">A living palace with art deco grandeur, marble suites, royal banquet halls and a stunning pool.</p>
+        <a href="bookings.html" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+      </div>
+    </div>
+
+    <!-- The Leela Goa -->
+    <div data-aos="fade-up" data-aos-delay="400" class="mat-card flex flex-col overflow-hidden cursor-pointer group">
+      <div class="overflow-hidden rounded-t-[2rem] h-56 relative group">
+        <img src="images/11416_0_theleelahotelgoa_fsa-g.jpg" alt="The Leela Resort" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+      </div>
+      <div class="p-7 space-y-3">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="font-bold text-slate-800 text-lg font-poppins">The Leela Resort</p>
+            <p class="text-slate-500 text-sm">North Goa, Goa</p>
+          </div>
+          <span class="badge-price">₹15,000/night</span>
+        </div>
+        <div class="flex gap-1 text-amber-400">★★★★★</div>
+        <p class="text-slate-500 text-sm">Nestled on Mobor beach — lush gardens, infinity pool, water sports and Goan cuisine.</p>
+        <a href="bookings.html" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+      </div>
+    </div>
+
+    <!-- Wildflower Hall Manali -->
+    <div data-aos="fade-up" data-aos-delay="300" class="mat-card flex flex-col overflow-hidden cursor-pointer group">
+      <div class="overflow-hidden rounded-t-[2rem] h-56 relative group">
+        <img src="images/WildflowerHall1.jpg" alt="Wildflower Hall" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+      </div>
+      <div class="p-7 space-y-3">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="font-bold text-slate-800 text-lg font-poppins">Wildflower Hall</p>
+            <p class="text-slate-500 text-sm">Shimla, Himachal Pradesh</p>
+          </div>
+          <span class="badge-price">₹30,000/night</span>
+        </div>
+        <div class="flex gap-1 text-amber-400">★★★★★</div>
+        <p class="text-slate-500 text-sm">Perched at 8,250 ft in cedar forests. Breathtaking Himalayan views, heated pool and spa.</p>
+        <a href="bookings.html" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+      </div>
+    </div>
+
+    <!-- ITC Grand Chola -->
+    <div data-aos="fade-up" data-aos-delay="400" class="mat-card flex flex-col overflow-hidden cursor-pointer group">
+      <div class="overflow-hidden rounded-t-[2rem] h-56 relative group">
+        <img src="images/itc-grand-chola-chennai.jpg" alt="ITC Grand Chola" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+      </div>
+      <div class="p-7 space-y-3">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="font-bold text-slate-800 text-lg font-poppins">ITC Grand Chola</p>
+            <p class="text-slate-500 text-sm">Chennai, Tamil Nadu</p>
+          </div>
+          <span class="badge-price">₹20,000/night</span>
+        </div>
+        <div class="flex gap-1 text-amber-400">★★★★★</div>
+        <p class="text-slate-500 text-sm">South India's grandest hotel inspired by Chola dynasty. 600 rooms, largest spa in Asia, fine dining.</p>
+        <a href="bookings.html" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+      </div>
+    </div>
+
+    <!-- Kumarakom Lake Resort -->
+    <div data-aos="fade-up" data-aos-delay="400" class="mat-card flex flex-col overflow-hidden cursor-pointer group">
+      <div class="overflow-hidden rounded-t-[2rem] h-56 relative group">
+        <img src="images/Kumarakom-Lake-Resort.jpg" alt="Kumarakom Lake Resort" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+      </div>
+      <div class="p-7 space-y-3">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="font-bold text-slate-800 text-lg font-poppins">Kumarakom Lake Resort</p>
+            <p class="text-slate-500 text-sm">Kumarakom, Kerala</p>
+          </div>
+          <span class="badge-price">₹18,000/night</span>
+        </div>
+        <div class="flex gap-1 text-amber-400">★★★★★</div>
+        <p class="text-slate-500 text-sm">Luxury heritage villas on Vembanad Lake. Private boat rides, Ayurveda treatments, lush nature.</p>
+        <a href="bookings.html" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="text-center py-8 text-sm text-slate-500 font-poppins border-t border-slate-100">
+  © 2024 Voyage. All rights reserved. Made with 🥰
+</footer>
+
+<script>
+  document.getElementById('mob-btn').addEventListener('click', () => {
+    document.getElementById('mob-menu').classList.toggle('hidden');
+  });
+</script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100,
+      });
+    </script>
+
+  <!-- FAB back-to-top -->
+  <button id="back-to-top" class="mat-fab" aria-label="Back to top" title="Back to top">↑</button>
+
+
+  <script>
+    const fab = document.getElementById('back-to-top');
+    if(fab) {
+      window.addEventListener('scroll', () => {
+        if(window.scrollY > 400) fab.classList.add('visible');
+        else fab.classList.remove('visible');
+        // navbar elevation
+        const nav = document.querySelector('.mat-navbar, header');
+        if(nav) nav.classList.toggle('scrolled', window.scrollY > 10);
+      });
+      fab.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
+  </script>
+
+</body>
+
+</html>

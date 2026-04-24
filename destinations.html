@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinations – Voyage</title>
+  <meta name="description" content="Explore India's most breathtaking destinations with Voyage. From Goa to Manali, find your perfect journey.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { poppins: ['Inter','sans-serif'], volkhov: ['Outfit','sans-serif'] } } }
+    }
+  </script>
+  <style>body{margin:0;padding:0;overflow-x:hidden}</style>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+      .blob {
+        position: absolute;
+        filter: blur(80px);
+        z-index: -2;
+        opacity: 0.6;
+        animation: float 10s ease-in-out infinite alternate;
+      }
+      @keyframes float {
+        0% { transform: translateY(0) scale(1); }
+        100% { transform: translateY(-30px) scale(1.1); }
+      }
+    </style>
+  <link rel="stylesheet" href="voyage.css">
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-white to-orange-50/40 text-slate-800 antialiased">
+  <!-- Background orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+
+    <div class="blob bg-orange-300 w-[500px] h-[500px] rounded-full top-[-100px] right-[-100px] mix-blend-multiply"></div>
+    <div class="blob bg-indigo-300 w-[400px] h-[400px] rounded-full top-[30vh] left-[-150px] mix-blend-multiply" style="animation-delay: 2s;"></div>
+    <div class="blob bg-pink-300 w-[600px] h-[600px] rounded-full bottom-[-200px] right-[10vw] mix-blend-multiply" style="animation-delay: 4s;"></div>
+
+
+<!-- NAV -->
+<header class="mat-navbar sticky top-0 z-50">
+  <div class="p-5 sm:px-16 sm:py-4 flex items-center justify-between max-w-[90rem] mx-auto font-poppins">
+    <a href="index.html" class="text-[#181E4B] font-volkhov font-bold text-3xl">Voyage.</a>
+    <nav class="hidden lg:flex items-center space-x-10">
+      <a href="about.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">About</a>
+      <a href="destinations.html" class="text-orange-500 font-semibold border-b-2 border-orange-400 pb-0.5">Destinations</a>
+      <a href="hotels.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Hotels</a>
+      <a href="flights.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Flights</a>
+      <a href="bookings.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Bookings</a>
+      <a href="login.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Login</a>
+      <a href="signup.html" class="mat-btn mat-btn-outlined">Signup</a>
+    </nav>
+    <button id="mob-btn" class="lg:hidden flex flex-col gap-1.5 p-2">
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+    </button>
+  </div>
+  <div id="mob-menu" class="hidden lg:hidden bg-white border-t px-6 py-4 space-y-3 font-poppins">
+    <a href="destinations.html" class="block text-orange-500 font-semibold">Destinations</a>
+    <a href="hotels.html" class="block text-slate-700 hover:text-orange-500">Hotels</a>
+    <a href="flights.html" class="block text-slate-700 hover:text-orange-500">Flights</a>
+    <a href="bookings.html" class="block text-slate-700 hover:text-orange-500">Bookings</a>
+    <a href="login.html" class="block text-slate-700 hover:text-orange-500">Login</a>
+    <a href="signup.html" class="block font-medium border-2 border-slate-800 rounded-xl px-4 py-2 text-center">Signup</a>
+  </div>
+</header>
+
+<!-- HERO BANNER -->
+<section data-aos="fade-up" class="relative bg-gradient-to-r from-orange-700 to-amber-500 py-24 px-6 sm:px-16 text-white overflow-hidden">
+  <div class="absolute inset-0 opacity-20" style="background-image:url('images/europe.jpg');background-size:cover;background-position:center"></div>
+  <div class="relative z-10 max-w-2xl">
+    <p class="text-amber-200 font-semibold uppercase tracking-widest text-sm mb-3">🇮🇳 Incredible India</p>
+    <h1 class="font-volkhov text-5xl sm:text-6xl font-bold leading-tight mb-4">Top Destinations</h1>
+    <p class="text-white/80 text-lg">Handpicked locations across India crafted for unforgettable adventures. Find your next journey.</p>
+  </div>
+</section>
+
+<!-- DESTINATIONS GRID (dynamic – powered by localStorage) -->
+<section data-aos="fade-up" class="p-6 sm:p-20">
+  <div id="destinations-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- Cards are injected by JS below -->
+  </div>
+  <p id="no-destinations" class="hidden text-center text-slate-400 py-16 text-lg">No destinations available right now. Check back soon!</p>
+</section>
+
+<!-- FOOTER -->
+<footer class="text-center py-8 text-sm text-slate-500 font-poppins border-t border-slate-100">
+  © 2024 Voyage. All rights reserved. Made with 🥰
+</footer>
+
+<script src="js/data.js"></script>
+<script>
+  document.getElementById('mob-btn').addEventListener('click', () => {
+    document.getElementById('mob-menu').classList.toggle('hidden');
+  });
+
+  // ── Render destination cards dynamically ──────────────────────────────────
+  (function renderDests() {
+    const dests = getDestinations();
+    const grid  = document.getElementById('destinations-grid');
+    const empty = document.getElementById('no-destinations');
+
+    if (!dests || !dests.length) {
+      grid.classList.add('hidden');
+      empty.classList.remove('hidden');
+      return;
+    }
+
+    grid.innerHTML = '';
+    dests.forEach((d, i) => {
+      const delay   = [400, 200, 300, 200, 100, 200][i % 6];
+      const detailId = 'details-' + d.id;
+      const btnId    = 'learn-btn-' + d.id;
+
+      // Build details bullet list (fallback for legacy entries)
+      const detailItems = Array.isArray(d.details) && d.details.length
+        ? d.details.map(item => `<li class="flex gap-2 leading-snug"><span class="shrink-0"></span><span>${item}</span></li>`).join('')
+        : `<li class="text-slate-400 italic">No additional details available for this tour.</li>`;
+
+      const card = document.createElement('div');
+      card.setAttribute('data-aos', 'fade-up');
+      card.setAttribute('data-aos-delay', delay);
+      card.className = 'mat-card flex flex-col overflow-hidden cursor-default group';
+      card.innerHTML = `
+        <div class="overflow-hidden rounded-t-[2rem] h-64 relative">
+          <img src="${d.image}" alt="${d.title}"
+               class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+               onerror="this.src='https://via.placeholder.com/400x260?text=${encodeURIComponent(d.title)}'"/>
+        </div>
+        <div class="p-7 space-y-2 flex flex-col flex-1">
+          <div class="flex justify-between items-center font-poppins">
+            <p class="font-bold text-slate-800 text-lg">${d.title}</p>
+            <span class="badge-price">${d.price}</span>
+          </div>
+          <p class="text-slate-500 text-sm">${d.description}</p>
+          <p class="text-slate-400 text-xs font-medium">✈ ${d.duration}</p>
+
+          <!-- Action buttons -->
+          <div class="flex gap-2 pt-1">
+            <a href="bookings.html" class="mat-btn mat-btn-primary ripple flex-1 text-center">Book Now</a>
+            <button
+              id="${btnId}"
+              onclick="toggleLearnMore('${d.id}')"
+              class="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border-2 border-slate-200 text-slate-600 font-semibold text-sm hover:border-orange-400 hover:text-orange-500 transition-all duration-200 whitespace-nowrap"
+              aria-expanded="false"
+              aria-controls="${detailId}"
+            >
+              Learn More
+              <svg id="chevron-${d.id}" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Accordion drop-down -->
+          <div
+            id="${detailId}"
+            style="max-height:0; overflow:hidden; transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease; opacity:0;"
+          >
+            <div class="mt-3 rounded-2xl bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-100 p-5">
+              <p class="text-xs font-bold text-orange-500 uppercase tracking-widest mb-3">📋 Tour Itinerary & Highlights</p>
+              <ul class="space-y-2 text-sm text-slate-600 list-none">
+                ${detailItems}
+              </ul>
+            </div>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  })();
+
+  // ── Toggle Learn More accordion ──────────────────────────────────────────────
+  function toggleLearnMore(destId) {
+    const panel  = document.getElementById('details-' + destId);
+    const btn    = document.getElementById('learn-btn-' + destId);
+    const chev   = document.getElementById('chevron-' + destId);
+    const isOpen = panel.style.maxHeight !== '0px' && panel.style.maxHeight !== '';
+
+    if (isOpen) {
+      panel.style.maxHeight = '0';
+      panel.style.opacity   = '0';
+      btn.setAttribute('aria-expanded', 'false');
+      chev.style.transform  = 'rotate(0deg)';
+      btn.classList.remove('border-orange-400', 'text-orange-500');
+      btn.classList.add('border-slate-200', 'text-slate-600');
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+      panel.style.opacity   = '1';
+      btn.setAttribute('aria-expanded', 'true');
+      chev.style.transform  = 'rotate(180deg)';
+      btn.classList.remove('border-slate-200', 'text-slate-600');
+      btn.classList.add('border-orange-400', 'text-orange-500');
+    }
+  }
+
+</script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100,
+      });
+    </script>
+
+  <!-- FAB back-to-top -->
+  <button id="back-to-top" class="mat-fab" aria-label="Back to top" title="Back to top">↑</button>
+
+
+  <script>
+    const fab = document.getElementById('back-to-top');
+    if(fab) {
+      window.addEventListener('scroll', () => {
+        if(window.scrollY > 400) fab.classList.add('visible');
+        else fab.classList.remove('visible');
+        // navbar elevation
+        const nav = document.querySelector('.mat-navbar, header');
+        if(nav) nav.classList.toggle('scrolled', window.scrollY > 10);
+      });
+      fab.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
+  </script>
+
+</body>
+
+</html>

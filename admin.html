@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard – Voyage</title>
+  <meta name="description" content="Voyage admin dashboard – manage tours, destinations and bookings.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { poppins: ['Inter','sans-serif'], volkhov: ['Outfit','sans-serif'] } } }
+    }
+  </script>
+  <link rel="stylesheet" href="voyage.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; overflow-x: hidden; }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      position: fixed; top: 0; left: 0; height: 100vh; width: 260px;
+      background: linear-gradient(160deg, #181E4B 0%, #2d3680 60%, #1e2355 100%);
+      z-index: 100; display: flex; flex-direction: column;
+      transition: transform 0.3s ease; box-shadow: 4px 0 24px rgba(0,0,0,.25);
+    }
+    #sidebar.hidden-mob { transform: translateX(-100%); }
+    .sidebar-link {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 20px; border-radius: 14px; margin: 3px 12px;
+      color: rgba(255,255,255,.65); font-size: .9rem; font-weight: 500;
+      cursor: pointer; transition: all .2s; text-decoration: none;
+    }
+    .sidebar-link:hover { background: rgba(255,255,255,.1); color: #fff; }
+    .sidebar-link.active { background: linear-gradient(90deg,#F1A501,#FF946D); color: #fff; box-shadow: 0 4px 14px rgba(241,165,1,.35); }
+    .sidebar-link .icon { font-size: 1.2rem; width: 24px; text-align: center; }
+
+    /* ── Main content ── */
+    #main { margin-left: 260px; min-height: 100vh; background: #f1f4f9; transition: margin .3s; }
+
+    /* ── Top bar ── */
+    #topbar {
+      position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.85);
+      backdrop-filter: blur(12px); border-bottom: 1px solid #e8ecf4;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px; gap: 16px;
+    }
+
+    /* ── Stat cards ── */
+    .stat-card {
+      background: #fff; border-radius: 20px; padding: 24px 28px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.06); border: 1px solid #edf0f7;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.1); }
+
+    /* ── Section card ── */
+    .section-card {
+      background: #fff; border-radius: 24px; padding: 32px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.06); border: 1px solid #edf0f7;
+    }
+
+    /* ── Table ── */
+    .admin-table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+    .admin-table th { background: #f8faff; color: #64748b; font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; padding: 12px 16px; text-align: left; border-bottom: 2px solid #e8ecf4; }
+    .admin-table td { padding: 14px 16px; border-bottom: 1px solid #f0f2f8; color: #374151; vertical-align: middle; }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: #fafbff; }
+    .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 99px; font-size: .75rem; font-weight: 600; }
+    .status-Confirmed { background: #dcfce7; color: #16a34a; }
+    .status-Pending   { background: #fef9c3; color: #ca8a04; }
+    .status-Cancelled { background: #fee2e2; color: #dc2626; }
+
+    /* ── Dest cards ── */
+    .dest-admin-card {
+      background: #fff; border-radius: 20px; overflow: hidden;
+      border: 1px solid #e8ecf4; box-shadow: 0 2px 12px rgba(0,0,0,.05);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .dest-admin-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,.1); }
+    .dest-admin-card img { width: 100%; height: 160px; object-fit: cover; display: block; }
+
+    /* ── Modal ── */
+    #modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
+      z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    #modal-overlay.open { display: flex; }
+    #modal-box {
+      background: #fff; border-radius: 28px; padding: 36px; width: 100%; max-width: 560px;
+      max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.25);
+      animation: popIn .25s ease;
+    }
+    @keyframes popIn { from { transform: scale(.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    /* ── Form inputs ── */
+    .adm-input {
+      width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px;
+      padding: 10px 14px; font-size: .9rem; color: #1e293b; outline: none; transition: border-color .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .adm-input:focus { border-color: #F1A501; }
+    .adm-label { display: block; font-size: .75rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+
+    /* ── Btn ── */
+    .adm-btn-primary {
+      background: linear-gradient(90deg, #F1A501, #FF946D);
+      color: #fff; font-weight: 700; border: none; border-radius: 14px;
+      padding: 12px 24px; cursor: pointer; font-size: .9rem; transition: all .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .adm-btn-primary:hover { box-shadow: 0 6px 18px rgba(241,165,1,.45); transform: translateY(-1px); }
+    .adm-btn-danger {
+      background: #fee2e2; color: #dc2626; font-weight: 600; border: none; border-radius: 10px;
+      padding: 7px 14px; cursor: pointer; font-size: .8rem; transition: background .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .adm-btn-danger:hover { background: #fecaca; }
+    .adm-btn-edit {
+      background: #eff6ff; color: #2563eb; font-weight: 600; border: none; border-radius: 10px;
+      padding: 7px 14px; cursor: pointer; font-size: .8rem; transition: background .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .adm-btn-edit:hover { background: #dbeafe; }
+    .adm-btn-ghost {
+      background: transparent; color: #64748b; font-weight: 500; border: 1.5px solid #e2e8f0;
+      border-radius: 12px; padding: 10px 20px; cursor: pointer; font-size: .875rem; transition: all .2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .adm-btn-ghost:hover { border-color: #94a3b8; color: #1e293b; }
+
+    /* ── Tabs ── */
+    .tab-btn { padding: 8px 20px; border-radius: 12px; font-weight: 600; font-size: .875rem; cursor: pointer; border: none; transition: all .2s; font-family: 'Inter', sans-serif; }
+    .tab-btn.active { background: linear-gradient(90deg,#F1A501,#FF946D); color: #fff; box-shadow: 0 4px 12px rgba(241,165,1,.35); }
+    .tab-btn:not(.active) { background: #f1f4f9; color: #64748b; }
+    .tab-btn:not(.active):hover { background: #e2e8f0; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.mob-open { transform: translateX(0); }
+      #main { margin-left: 0; }
+    }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 300;
+      background: #1e293b; color: #fff; padding: 14px 22px;
+      border-radius: 14px; font-size: .875rem; font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,.25); opacity: 0; transform: translateY(12px);
+      transition: opacity .3s, transform .3s; pointer-events: none;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body class="font-poppins bg-[#f1f4f9]">
+
+<!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+<aside id="sidebar">
+  <div class="px-6 py-7 border-b border-white/10">
+    <a href="index.html" class="text-white font-volkhov font-bold text-2xl">Voyage.</a>
+    <p class="text-white/40 text-xs mt-1 font-medium">Admin Dashboard</p>
+  </div>
+  <nav class="flex-1 py-5 overflow-y-auto">
+    <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-8 mb-3">Menu</p>
+    <a class="sidebar-link active" id="nav-overview" onclick="showTab('overview')">
+      <span class="icon">📊</span> Overview
+    </a>
+    <a class="sidebar-link" id="nav-bookings" onclick="showTab('bookings')">
+      <span class="icon">🗓️</span> Bookings
+    </a>
+    <a class="sidebar-link" id="nav-tours" onclick="showTab('tours')">
+      <span class="icon">🗺️</span> Manage Tours
+    </a>
+    <div class="border-t border-white/10 my-4 mx-4"></div>
+    <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-8 mb-3">System</p>
+    <a href="index.html" class="sidebar-link">
+      <span class="icon">🌐</span> View Website
+    </a>
+    <a href="destinations.html" class="sidebar-link">
+      <span class="icon">📍</span> Destinations Page
+    </a>
+    <a class="sidebar-link" onclick="adminLogout()">
+      <span class="icon">🚪</span> Logout
+    </a>
+  </nav>
+  <div class="px-6 py-5 border-t border-white/10">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-full bg-gradient-to-br from-orange-400 to-amber-300 flex items-center justify-center font-bold text-white text-sm">A</div>
+      <div>
+        <p class="text-white text-sm font-semibold">Admin</p>
+        <p class="text-white/40 text-xs">shrirajadmin@gmail.com</p>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════════════ MAIN CONTENT ═══════════════════ -->
+<div id="main">
+
+  <!-- Top Bar -->
+  <header id="topbar">
+    <div class="flex items-center gap-4">
+      <button id="mob-menu-btn" class="md:hidden text-slate-600 text-xl" onclick="toggleSidebar()">☰</button>
+      <div>
+        <h1 id="page-title" class="font-volkhov text-xl font-bold text-[#181E4B]">Overview</h1>
+        <p id="page-sub" class="text-slate-400 text-xs mt-0.5">Welcome back, Admin 👋</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="hidden sm:inline-flex items-center gap-1.5 bg-green-50 text-green-600 text-xs font-semibold px-3 py-1.5 rounded-full border border-green-100">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-500 inline-block animate-pulse"></span>
+        Live
+      </span>
+      <div class="w-9 h-9 rounded-full bg-gradient-to-br from-orange-400 to-amber-300 flex items-center justify-center font-bold text-white text-sm">A</div>
+    </div>
+  </header>
+
+  <div class="p-6 sm:p-10 space-y-8">
+
+    <!-- ═══ OVERVIEW TAB ═══ -->
+    <section id="tab-overview">
+
+      <!-- Stat cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <div class="stat-card">
+          <p class="text-slate-400 text-xs font-semibold uppercase tracking-wide mb-2">Total Bookings</p>
+          <p id="stat-bookings" class="text-3xl font-bold font-volkhov text-[#181E4B]">—</p>
+          <p class="text-green-500 text-xs font-medium mt-1">↑ 12% this month</p>
+        </div>
+        <div class="stat-card">
+          <p class="text-slate-400 text-xs font-semibold uppercase tracking-wide mb-2">Active Tours</p>
+          <p id="stat-tours" class="text-3xl font-bold font-volkhov text-[#181E4B]">—</p>
+          <p class="text-orange-500 text-xs font-medium mt-1">Available now</p>
+        </div>
+        <div class="stat-card">
+          <p class="text-slate-400 text-xs font-semibold uppercase tracking-wide mb-2">Confirmed</p>
+          <p id="stat-confirmed" class="text-3xl font-bold font-volkhov text-green-600">—</p>
+          <p class="text-slate-400 text-xs font-medium mt-1">Paid bookings</p>
+        </div>
+        <div class="stat-card">
+          <p class="text-slate-400 text-xs font-semibold uppercase tracking-wide mb-2">Pending</p>
+          <p id="stat-pending" class="text-3xl font-bold font-volkhov text-amber-500">—</p>
+          <p class="text-slate-400 text-xs font-medium mt-1">Awaiting payment</p>
+        </div>
+      </div>
+
+      <!-- Recent Bookings mini table -->
+      <div class="section-card">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-volkhov text-xl font-bold text-[#181E4B]">Recent Bookings</h2>
+          <button class="text-orange-500 text-sm font-semibold hover:underline" onclick="showTab('bookings')">View all →</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="admin-table" id="overview-bookings-table">
+            <thead>
+              <tr>
+                <th>Traveller</th>
+                <th>Destination</th>
+                <th>Departure</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="overview-bookings-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Top destinations -->
+      <div class="section-card mt-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="font-volkhov text-xl font-bold text-[#181E4B]">Top Destinations by Bookings</h2>
+          <button class="text-orange-500 text-sm font-semibold hover:underline" onclick="showTab('tours')">Manage →</button>
+        </div>
+        <div id="top-dests-list" class="space-y-3"></div>
+      </div>
+
+    </section>
+
+    <!-- ═══ BOOKINGS TAB ═══ -->
+    <section id="tab-bookings" class="hidden">
+      <div class="section-card">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <h2 class="font-volkhov text-xl font-bold text-[#181E4B]">All Traveller Bookings</h2>
+          <div class="flex gap-2 flex-wrap">
+            <button class="tab-btn active" id="filter-all"       onclick="filterBookings('All')">All</button>
+            <button class="tab-btn" id="filter-Confirmed"  onclick="filterBookings('Confirmed')">Confirmed</button>
+            <button class="tab-btn" id="filter-Pending"    onclick="filterBookings('Pending')">Pending</button>
+            <button class="tab-btn" id="filter-Cancelled"  onclick="filterBookings('Cancelled')">Cancelled</button>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Traveller</th>
+                <th>Email</th>
+                <th>Destination</th>
+                <th>Duration</th>
+                <th>Travellers</th>
+                <th>Departure</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ MANAGE TOURS TAB ═══ -->
+    <section id="tab-tours" class="hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <h2 class="font-volkhov text-2xl font-bold text-[#181E4B]">Manage Tours</h2>
+        <button class="adm-btn-primary" onclick="openAddModal()">+ Add New Tour</button>
+      </div>
+      <div id="dest-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+  </div><!-- /p-6 -->
+</div><!-- /#main -->
+
+<!-- ═══════════════════ MODAL ═══════════════════ -->
+<div id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div id="modal-box">
+    <div class="flex items-center justify-between mb-6">
+      <h2 id="modal-title" class="font-volkhov text-2xl font-bold text-[#181E4B]">Add New Tour</h2>
+      <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 text-2xl leading-none">&times;</button>
+    </div>
+    <form id="tour-form" onsubmit="handleTourSubmit(event)" class="space-y-4">
+      <input type="hidden" id="form-id">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="sm:col-span-2">
+          <label class="adm-label">Tour Title *</label>
+          <input id="form-title" class="adm-input" type="text" placeholder="e.g. Goa Beach Paradise" required>
+        </div>
+        <div>
+          <label class="adm-label">Subtitle / Location *</label>
+          <input id="form-subtitle" class="adm-input" type="text" placeholder="e.g. Goa, India" required>
+        </div>
+        <div>
+          <label class="adm-label">Price *</label>
+          <input id="form-price" class="adm-input" type="text" placeholder="e.g. ₹45,000" required>
+        </div>
+        <div>
+          <label class="adm-label">Duration *</label>
+          <input id="form-duration" class="adm-input" type="text" placeholder="e.g. 7 Days Trip" required>
+        </div>
+        <div>
+          <label class="adm-label">Category Tag</label>
+          <input id="form-tag" class="adm-input" type="text" placeholder="e.g. 🏖️ Beach">
+        </div>
+        <div class="sm:col-span-2">
+          <label class="adm-label">Image URL</label>
+          <input id="form-image" class="adm-input" type="text" placeholder="e.g. images/goa_beach.png">
+        </div>
+        <div class="sm:col-span-2">
+          <label class="adm-label">Description *</label>
+          <textarea id="form-description" class="adm-input" rows="3" placeholder="Brief tour description..." required style="resize:vertical"></textarea>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="adm-label">Tour Details / Highlights <span class="normal-case font-normal text-slate-400">(one line per bullet — shown in "Learn More")</span></label>
+          <textarea id="form-details" class="adm-input" rows="6" placeholder="🛬 Day 1: Arrival & check-in&#10;🏖️ Day 2: Beach exploration&#10;✅ Includes: Flights · Hotel · Guide" style="resize:vertical"></textarea>
+        </div>
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button type="submit" class="adm-btn-primary flex-1">Save Tour</button>
+        <button type="button" class="adm-btn-ghost" onclick="closeModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- data layer -->
+<script src="js/data.js"></script>
+<script>
+  // ── Auth guard ──────────────────────────────────────────────────────────────
+  if (!sessionStorage.getItem('voyage_admin')) {
+    alert('⛔ Access denied. Please log in as admin.');
+    window.location.href = 'login.html';
+  }
+
+  // ── Tab management ──────────────────────────────────────────────────────────
+  const tabs = ['overview', 'bookings', 'tours'];
+  const tabTitles = { overview: ['Overview', 'Welcome back, Admin 👋'], bookings: ['Bookings', 'All traveller bookings'], tours: ['Manage Tours', 'Add, edit or remove destination tours'] };
+
+  function showTab(name) {
+    tabs.forEach(t => {
+      document.getElementById('tab-' + t).classList.add('hidden');
+      document.getElementById('nav-' + t).classList.remove('active');
+    });
+    document.getElementById('tab-' + name).classList.remove('hidden');
+    document.getElementById('nav-' + name).classList.add('active');
+    document.getElementById('page-title').textContent = tabTitles[name][0];
+    document.getElementById('page-sub').textContent   = tabTitles[name][1];
+    if (name === 'bookings') renderBookingsTable('All');
+    if (name === 'tours')    renderDestCards();
+    if (name === 'overview') renderOverview();
+    // Close mobile sidebar
+    document.getElementById('sidebar').classList.remove('mob-open');
+  }
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('mob-open');
+  }
+
+  // ── Overview ─────────────────────────────────────────────────────────────────
+  function renderOverview() {
+    const bookings = getBookings();
+    const dests    = getDestinations();
+    document.getElementById('stat-bookings').textContent  = bookings.length;
+    document.getElementById('stat-tours').textContent     = dests.length;
+    document.getElementById('stat-confirmed').textContent = bookings.filter(b => b.status === 'Confirmed').length;
+    document.getElementById('stat-pending').textContent   = bookings.filter(b => b.status === 'Pending').length;
+
+    // Recent 5 bookings
+    const tbody = document.getElementById('overview-bookings-body');
+    tbody.innerHTML = '';
+    bookings.slice(0, 5).forEach(b => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td class="font-medium">${b.traveller}</td>
+        <td>${b.destination}</td>
+        <td>${b.departure}</td>
+        <td class="font-semibold text-orange-500">${b.amount}</td>
+        <td><span class="status-badge status-${b.status}">${statusDot(b.status)} ${b.status}</span></td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    // Top dests by bookings
+    const list = document.getElementById('top-dests-list');
+    list.innerHTML = '';
+    const sorted = [...dests].sort((a, b) => (b.bookings || 0) - (a.bookings || 0)).slice(0, 5);
+    const maxB = sorted[0]?.bookings || 1;
+    sorted.forEach((d, i) => {
+      const pct = Math.round(((d.bookings || 0) / maxB) * 100);
+      list.innerHTML += `
+        <div class="flex items-center gap-4">
+          <span class="text-slate-400 text-sm font-bold w-5">${i+1}</span>
+          <img src="${d.image}" class="w-10 h-10 rounded-xl object-cover" onerror="this.src='https://via.placeholder.com/40'">
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between mb-1">
+              <span class="text-sm font-semibold text-slate-700 truncate">${d.title}</span>
+              <span class="text-xs text-slate-400 font-medium ml-2">${d.bookings || 0} bookings</span>
+            </div>
+            <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+              <div class="h-full rounded-full bg-gradient-to-r from-orange-400 to-amber-400" style="width:${pct}%"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  // ── Bookings table ────────────────────────────────────────────────────────────
+  let _currentFilter = 'All';
+
+  function filterBookings(status) {
+    _currentFilter = status;
+    document.querySelectorAll('#tab-bookings .tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('filter-' + (status === 'All' ? 'all' : status)).classList.add('active');
+    renderBookingsTable(status);
+  }
+
+  function renderBookingsTable(status) {
+    const all = getBookings();
+    const rows = status === 'All' ? all : all.filter(b => b.status === status);
+    const tbody = document.getElementById('bookings-table-body');
+    tbody.innerHTML = '';
+    if (!rows.length) {
+      tbody.innerHTML = `<tr><td colspan="9" class="text-center text-slate-400 py-8">No bookings found.</td></tr>`;
+      return;
+    }
+    rows.forEach((b, i) => {
+      tbody.innerHTML += `
+        <tr>
+          <td class="text-slate-400">${i+1}</td>
+          <td class="font-semibold text-slate-800">${b.traveller}</td>
+          <td class="text-slate-500">${b.email}</td>
+          <td>${b.destination}</td>
+          <td>${b.duration}</td>
+          <td>${b.travellers}</td>
+          <td>${b.departure}</td>
+          <td class="font-bold text-orange-500">${b.amount}</td>
+          <td><span class="status-badge status-${b.status}">${statusDot(b.status)} ${b.status}</span></td>
+        </tr>
+      `;
+    });
+  }
+
+  function statusDot(s) {
+    return s === 'Confirmed' ? '●' : s === 'Pending' ? '◐' : '○';
+  }
+
+  // ── Destinations cards ────────────────────────────────────────────────────────
+  function renderDestCards() {
+    const dests = getDestinations();
+    const grid  = document.getElementById('dest-grid');
+    grid.innerHTML = '';
+    if (!dests.length) {
+      grid.innerHTML = `<p class="col-span-3 text-center text-slate-400 py-12">No tours added yet. Click "Add New Tour" to get started!</p>`;
+      return;
+    }
+    dests.forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'dest-admin-card';
+      card.innerHTML = `
+        <img src="${d.image}" alt="${d.title}" onerror="this.src='https://via.placeholder.com/400x160?text=No+Image'">
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <div>
+              <h3 class="font-bold text-slate-800 text-base leading-tight">${d.title}</h3>
+              <p class="text-slate-400 text-xs mt-0.5">${d.duration}</p>
+            </div>
+            <span class="text-orange-500 font-bold text-sm whitespace-nowrap">${d.price}</span>
+          </div>
+          <p class="text-slate-500 text-xs leading-relaxed mb-4 line-clamp-2">${d.description}</p>
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-xs font-medium bg-orange-50 text-orange-600 border border-orange-100 px-2.5 py-1 rounded-full">${d.tag || '🗺️ Tour'}</span>
+            <div class="flex gap-2">
+              <button class="adm-btn-edit" onclick="openEditModal('${d.id}')">✏️ Edit</button>
+              <button class="adm-btn-danger" onclick="deleteDest('${d.id}')">🗑️ Delete</button>
+            </div>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function deleteDest(id) {
+    const d = getDestinationById(id);
+    if (!d) return;
+    if (!confirm(`Delete "${d.title}"? This will remove it from the destinations page too.`)) return;
+    deleteDestination(id);
+    renderDestCards();
+    renderOverview();
+    showToast(`"${d.title}" deleted.`);
+  }
+
+  // ── Modal ─────────────────────────────────────────────────────────────────────
+  let _editingId = null;
+
+  function openAddModal() {
+    _editingId = null;
+    document.getElementById('modal-title').textContent = '➕ Add New Tour';
+    document.getElementById('tour-form').reset();
+    document.getElementById('form-id').value = '';
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function openEditModal(id) {
+    const d = getDestinationById(id);
+    if (!d) return;
+    _editingId = id;
+    document.getElementById('modal-title').textContent = '✏️ Edit Tour';
+    document.getElementById('form-id').value          = d.id;
+    document.getElementById('form-title').value       = d.title;
+    document.getElementById('form-subtitle').value    = d.subtitle || '';
+    document.getElementById('form-price').value       = d.price;
+    document.getElementById('form-duration').value    = d.duration;
+    document.getElementById('form-tag').value         = d.tag || '';
+    document.getElementById('form-image').value       = d.image;
+    document.getElementById('form-description').value = d.description;
+    document.getElementById('form-details').value     = Array.isArray(d.details) ? d.details.join('\n') : (d.details || '');
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    _editingId = null;
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  }
+
+  function handleTourSubmit(e) {
+    e.preventDefault();
+    // Parse details: split by newline, filter blank lines
+    const rawDetails = document.getElementById('form-details').value;
+    const detailsArr = rawDetails.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+    const data = {
+      title      : document.getElementById('form-title').value.trim(),
+      subtitle   : document.getElementById('form-subtitle').value.trim(),
+      price      : document.getElementById('form-price').value.trim(),
+      duration   : document.getElementById('form-duration').value.trim(),
+      tag        : document.getElementById('form-tag').value.trim() || '🗺️ Tour',
+      image      : document.getElementById('form-image').value.trim() || 'https://via.placeholder.com/400x260?text=Tour',
+      description: document.getElementById('form-description').value.trim(),
+      details    : detailsArr.length ? detailsArr : ['No additional details available for this tour.'],
+    };
+
+    if (_editingId) {
+      updateDestination(_editingId, data);
+      showToast(`"${data.title}" updated successfully!`);
+    } else {
+      addDestination(data);
+      showToast(`"${data.title}" added!`);
+    }
+    closeModal();
+    renderDestCards();
+    renderOverview();
+  }
+
+  // ── Toast ─────────────────────────────────────────────────────────────────────
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ── Logout ────────────────────────────────────────────────────────────────────
+  function adminLogout() {
+    sessionStorage.removeItem('voyage_admin');
+    window.location.href = 'login.html';
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────────
+  renderOverview();
+
+  // Close sidebar on outside click (mobile)
+  document.addEventListener('click', (e) => {
+    const sidebar = document.getElementById('sidebar');
+    const menuBtn = document.getElementById('mob-menu-btn');
+    if (window.innerWidth < 768 && sidebar.classList.contains('mob-open') &&
+        !sidebar.contains(e.target) && e.target !== menuBtn) {
+      sidebar.classList.remove('mob-open');
+    }
+  });
+</script>
+</body>
+</html>

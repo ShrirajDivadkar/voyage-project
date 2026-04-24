@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us – Voyage</title>
+  <meta name="description" content="Learn more about Voyage, our mission to redefine travel in India, and the passionate team behind the journey.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { poppins: ['Inter','sans-serif'], volkhov: ['Outfit','sans-serif'] } } }
+    }
+  </script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="voyage.css">
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-white to-orange-50/40 text-slate-800 antialiased">
+  
+  <!-- Background orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+
+  <!-- NAV -->
+  <header class="mat-navbar sticky top-0 z-50">
+    <div class="p-5 sm:px-16 sm:py-4 flex items-center justify-between max-w-[90rem] mx-auto font-poppins">
+      <a href="index.html" class="text-[#181E4B] font-volkhov font-bold text-3xl">Voyage.</a>
+      <nav class="hidden lg:flex items-center space-x-10">
+        <a href="about.html" class="text-orange-500 font-semibold border-b-2 border-orange-400 pb-0.5">About</a>
+        <a href="destinations.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Destinations</a>
+        <a href="hotels.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Hotels</a>
+        <a href="flights.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Flights</a>
+        <a href="bookings.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Bookings</a>
+        <a href="login.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Login</a>
+        <a href="signup.html" class="mat-btn mat-btn-outlined">Signup</a>
+      </nav>
+      <button id="mob-btn" class="lg:hidden flex flex-col gap-1.5 p-2">
+        <span class="w-6 h-0.5 bg-slate-800 block"></span>
+        <span class="w-6 h-0.5 bg-slate-800 block"></span>
+        <span class="w-6 h-0.5 bg-slate-800 block"></span>
+      </button>
+    </div>
+    <div id="mob-menu" class="hidden lg:hidden bg-white border-t px-6 py-4 space-y-3 font-poppins">
+      <a href="about.html" class="block text-orange-500 font-semibold">About</a>
+      <a href="destinations.html" class="block text-slate-700">Destinations</a>
+      <a href="hotels.html" class="block text-slate-700">Hotels</a>
+      <a href="flights.html" class="block text-slate-700">Flights</a>
+      <a href="bookings.html" class="block text-slate-700">Bookings</a>
+      <a href="signup.html" class="block mat-btn mat-btn-outlined w-full">Signup</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative pt-24 pb-32 px-6 sm:px-16 overflow-hidden">
+    <div class="max-w-4xl mx-auto text-center relative z-10" data-aos="fade-up">
+      <p class="text-orange-500 font-bold uppercase tracking-widest text-sm mb-4">Our Story</p>
+      <h1 class="font-volkhov text-5xl sm:text-7xl font-black leading-tight mb-8">
+        Redefining the Way You Explore <span class="text-gradient">India</span>
+      </h1>
+      <div class="hero-search glass-xl p-8 max-w-2xl mx-auto mt-12 text-left">
+        <p class="text-lg text-slate-600 leading-relaxed">
+          Voyage was born from a simple passion: to make India's breathtaking beauty accessible to everyone. We combine state-of-the-art technology with deep local expertise to craft experiences that last a lifetime.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION SECTION -->
+  <section class="p-6 sm:p-20 bg-white/30 backdrop-blur-sm">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center max-w-[85rem] mx-auto">
+      <div data-aos="fade-right">
+        <h2 class="font-volkhov font-bold text-4xl sm:text-5xl mb-6 text-[#181E4B]">Driven by Passion, Guided by Experts</h2>
+        <p class="text-slate-600 text-lg mb-8 leading-relaxed font-poppins">
+          Since 2018, we've helped over 50,000 travelers discover the hidden gems of the Indian subcontinent. Whether it's the quiet backwaters of Kerala or the bustling streets of Jaipur, we believe every journey should be as unique as the traveler.
+        </p>
+        <div class="grid grid-cols-2 gap-8 font-poppins">
+          <div class="space-y-1">
+            <p class="text-4xl font-bold text-orange-500">50K+</p>
+            <p class="text-slate-500 font-medium italic">Happy Travelers</p>
+          </div>
+          <div class="space-y-1">
+            <p class="text-4xl font-bold text-indigo-600">200+</p>
+            <p class="text-slate-500 font-medium italic">Local Guides</p>
+          </div>
+        </div>
+      </div>
+      <div class="relative" data-aos="zoom-in">
+        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80" alt="Voyage Team" class="rounded-[3rem] shadow-2xl relative z-10 w-full object-cover h-[500px]">
+        <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-orange-200 rounded-full -z-10 animate-pulse"></div>
+        <div class="absolute -top-6 -right-6 w-24 h-24 bg-indigo-200 rounded-full -z-10 animate-bounce"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES SECTION -->
+  <section class="p-6 sm:p-20 text-center">
+    <div class="mb-16" data-aos="fade-up">
+      <p class="uppercase font-bold text-gray-500 tracking-widest text-sm mb-2">Our Core Values</p>
+      <h2 class="font-volkhov font-bold text-4xl sm:text-5xl text-[#181E4B]">What We Stand For</h2>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto font-poppins">
+      <!-- Card 1 -->
+      <div class="mat-card p-10 space-y-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto text-orange-500 text-3xl">🌍</div>
+        <h3 class="font-bold text-xl">Authenticity</h3>
+        <p class="text-slate-500">We prioritize local, authentic experiences that showcase the true heart of every destination.</p>
+      </div>
+      <!-- Card 2 -->
+      <div class="mat-card p-10 space-y-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center mx-auto text-indigo-500 text-3xl">🛡️</div>
+        <h3 class="font-bold text-xl">Travel Safety</h3>
+        <p class="text-slate-500">Your safety is our top priority. Everything from transport to stays is rigorously vetted.</p>
+      </div>
+      <!-- Card 3 -->
+      <div class="mat-card p-10 space-y-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="w-16 h-16 bg-pink-100 rounded-2xl flex items-center justify-center mx-auto text-pink-500 text-3xl">💎</div>
+        <h3 class="font-bold text-xl">Unbeatable Value</h3>
+        <p class="text-slate-500">Premium travel shouldn't mean premium prices. We negotiate directly to save you more.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="p-6 sm:p-20 pt-32 font-poppins">
+    <div class="grid grid-cols-1 sm:grid-cols-12 gap-10 max-w-[90rem] mx-auto border-t border-slate-100 pt-16">
+      <div class="col-span-4 space-y-6">
+        <a href="index.html" class="text-4xl font-volkhov font-bold">Voyage.</a>
+        <p class="text-slate-500 max-w-xs leading-relaxed">Book your trip in minute, get full Control for much longer.</p>
+      </div>
+      <div class="col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-10">
+        <div class="space-y-4">
+          <p class="font-bold text-lg">Company</p>
+          <div class="flex flex-col space-y-2 text-slate-500">
+            <a href="about.html">About</a>
+            <a href="/">Careers</a>
+            <a href="/">Mobile</a>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <p class="font-bold text-lg">Contact</p>
+          <div class="flex flex-col space-y-2 text-slate-500">
+            <a href="/">Help/FAQ</a>
+            <a href="/">Press</a>
+            <a href="/">Affilates</a>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <p class="font-bold text-lg">More</p>
+          <div class="flex flex-col space-y-2 text-slate-500">
+            <a href="/">Airlinefees</a>
+            <a href="/">Airline</a>
+            <a href="/">Low fare tips</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-24 text-slate-400 text-sm italic">
+      Made with 🥰 & Premium Morphisms — The Coding Montana
+    </div>
+  </footer>
+
+  <!-- FAB back-to-top -->
+  <button id="back-to-top" class="mat-fab" aria-label="Back to top" title="Back to top">↑</button>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 1000, once: true, offset: 100 });
+
+    const fab = document.getElementById('back-to-top');
+    if(fab) {
+      window.addEventListener('scroll', () => {
+        if(window.scrollY > 400) fab.classList.add('visible');
+        else fab.classList.remove('visible');
+        const nav = document.querySelector('.mat-navbar');
+        if(nav) nav.classList.toggle('scrolled', window.scrollY > 10);
+      });
+      fab.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
+
+    const mobBtn = document.getElementById('mob-btn');
+    const mobMenu = document.getElementById('mob-menu');
+    if(mobBtn && mobMenu) {
+      mobBtn.addEventListener('click', () => {
+        mobMenu.classList.toggle('hidden');
+      });
+    }
+  </script>
+</body>
+</html>

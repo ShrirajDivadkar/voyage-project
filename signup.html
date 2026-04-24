@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up – Voyage</title>
+  <meta name="description" content="Create your free Voyage account and start planning unforgettable trips.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { poppins: ['Inter','sans-serif'], volkhov: ['Outfit','sans-serif'] } } }
+    }
+  </script>
+  <style>body{margin:0;padding:0;overflow-x:hidden}</style>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+      .blob {
+        position: absolute;
+        filter: blur(80px);
+        z-index: -2;
+        opacity: 0.6;
+        animation: float 10s ease-in-out infinite alternate;
+      }
+      @keyframes float {
+        0% { transform: translateY(0) scale(1); }
+        100% { transform: translateY(-30px) scale(1.1); }
+      }
+    </style>
+  <link rel="stylesheet" href="voyage.css">
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-white to-orange-50/40 text-slate-800 antialiased min-h-screen">
+  <!-- Background orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+
+    <div class="blob bg-orange-300 w-[500px] h-[500px] rounded-full top-[-100px] right-[-100px] mix-blend-multiply"></div>
+    <div class="blob bg-indigo-300 w-[400px] h-[400px] rounded-full top-[30vh] left-[-150px] mix-blend-multiply" style="animation-delay: 2s;"></div>
+    <div class="blob bg-pink-300 w-[600px] h-[600px] rounded-full bottom-[-200px] right-[10vw] mix-blend-multiply" style="animation-delay: 4s;"></div>
+
+
+<!-- NAV -->
+<header class="mat-navbar sticky top-0 z-50">
+  <div class="p-5 sm:px-16 sm:py-4 flex items-center justify-between max-w-[90rem] mx-auto font-poppins">
+    <a href="index.html" class="text-[#181E4B] font-volkhov font-bold text-3xl">Voyage.</a>
+    <nav class="hidden lg:flex items-center space-x-10">
+      <a href="about.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">About</a>
+      <a href="destinations.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Destinations</a>
+      <a href="hotels.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Hotels</a>
+      <a href="flights.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Flights</a>
+      <a href="bookings.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Bookings</a>
+      <a href="login.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Login</a>
+      <a href="signup.html" class="border-2 rounded-xl px-5 py-2.5 border-slate-800 bg-slate-800 text-white font-medium">Signup</a>
+    </nav>
+    <button id="mob-btn" class="lg:hidden flex flex-col gap-1.5 p-2">
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+    </button>
+  </div>
+  <div id="mob-menu" class="hidden lg:hidden bg-white border-t px-6 py-4 space-y-3 font-poppins">
+    <a href="destinations.html" class="block text-slate-700 hover:text-orange-500">Destinations</a>
+    <a href="hotels.html" class="block text-slate-700 hover:text-orange-500">Hotels</a>
+    <a href="flights.html" class="block text-slate-700 hover:text-orange-500">Flights</a>
+    <a href="bookings.html" class="block text-slate-700 hover:text-orange-500">Bookings</a>
+    <a href="login.html" class="block text-slate-700 hover:text-orange-500">Login</a>
+    <a href="signup.html" class="block font-medium border-2 border-slate-800 bg-slate-800 text-white rounded-xl px-4 py-2 text-center">Signup</a>
+  </div>
+</header>
+
+<!-- SIGNUP -->
+<main class="flex items-center justify-center px-6 py-20">
+  <div class="w-full max-w-lg">
+    <div class="bg-white rounded-[2rem] shadow-2xl shadow-slate-200 border border-slate-100 p-10 font-poppins">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <a href="index.html" class="text-[#181E4B] font-volkhov font-bold text-4xl">Voyage.</a>
+        <p class="text-slate-500 mt-2">Create your free account today ✈️</p>
+      </div>
+
+      <!-- Social Signup -->
+      <div class="grid grid-cols-2 gap-3 mb-6">
+        <button class="flex items-center justify-center gap-2 border border-slate-200 rounded-xl py-3 hover:bg-slate-50 transition-colors text-sm font-medium text-slate-700">
+          <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Google
+        </button>
+        <button class="flex items-center justify-center gap-2 border border-slate-200 rounded-xl py-3 hover:bg-slate-50 transition-colors text-sm font-medium text-slate-700">
+          <svg class="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Facebook
+        </button>
+      </div>
+
+      <div class="flex items-center gap-3 mb-6">
+        <div class="flex-1 h-px bg-slate-200"></div>
+        <span class="text-slate-400 text-sm">or sign up with email</span>
+        <div class="flex-1 h-px bg-slate-200"></div>
+      </div>
+
+      <!-- Form -->
+      <form id="signup-form" onsubmit="handleSignup(event)" class="space-y-5">
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">First Name</label>
+            <input type="text" placeholder="John" required
+              class="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-700 outline-none focus:border-orange-400 transition-colors">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">Last Name</label>
+            <input type="text" placeholder="Doe" required
+              class="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-700 outline-none focus:border-orange-400 transition-colors">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">Email</label>
+          <input type="email" placeholder="you@example.com" required
+            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-700 outline-none focus:border-orange-400 transition-colors">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">Password</label>
+          <input type="password" placeholder="Min. 8 characters" required minlength="8"
+            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-700 outline-none focus:border-orange-400 transition-colors">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1.5">Confirm Password</label>
+          <input type="password" placeholder="Repeat password" required
+            class="w-full border border-slate-200 rounded-xl px-4 py-3 text-slate-700 outline-none focus:border-orange-400 transition-colors">
+        </div>
+        <label class="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" required class="accent-orange-500 w-4 h-4 mt-0.5 rounded flex-shrink-0">
+          <span class="text-sm text-slate-600">I agree to the <a href="#" class="text-orange-500 hover:underline">Terms & Conditions</a> and <a href="#" class="text-orange-500 hover:underline">Privacy Policy</a></span>
+        </label>
+        <button type="submit"
+          class="w-full bg-gradient-to-r from-[#F1A501] to-[#FF946D] text-white font-bold rounded-xl py-3.5 text-base hover:shadow-xl hover:shadow-orange-400/30 hover:-translate-y-0.5 transition-all duration-300">
+          Create Account →
+        </button>
+      </form>
+
+      <!-- Success -->
+      <div id="signup-success" class="hidden text-center py-6">
+        <p class="text-5xl mb-3">🎊</p>
+        <p class="font-bold text-green-600 text-xl font-volkhov">Account Created!</p>
+        <p class="text-slate-500 mt-2 text-sm">Welcome to Voyage! Ready to explore India?</p>
+        <a href="destinations.html" class="mt-4 inline-block bg-gradient-to-r from-[#F1A501] to-[#FF946D] text-white font-semibold rounded-xl px-6 py-2.5 hover:shadow-lg transition-all duration-300">Explore Destinations</a>
+      </div>
+
+      <!-- Perks -->
+      <div class="mt-7 grid grid-cols-3 gap-3 text-center border-t border-slate-100 pt-6">
+        <div class="text-sm text-slate-500">
+          <p class="text-xl mb-1">🔒</p>
+          <p class="font-medium text-slate-700">Secure</p>
+        </div>
+        <div class="text-sm text-slate-500">
+          <p class="text-xl mb-1">💳</p>
+          <p class="font-medium text-slate-700">Free Forever</p>
+        </div>
+        <div class="text-sm text-slate-500">
+          <p class="text-xl mb-1">💬</p>
+          <p class="font-medium text-slate-700">24/7 Support</p>
+        </div>
+      </div>
+
+      <p class="text-center text-sm text-slate-500 mt-6">
+        Already have an account?
+        <a href="login.html" class="text-orange-500 font-semibold hover:underline">Sign in</a>
+      </p>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="text-center pb-8 text-sm text-slate-400 font-poppins">
+  © 2024 Voyage. All rights reserved.
+</footer>
+
+<script>
+  document.getElementById('mob-btn').addEventListener('click', () => {
+    document.getElementById('mob-menu').classList.toggle('hidden');
+  });
+
+  function handleSignup(e) {
+    e.preventDefault();
+    document.getElementById('signup-form').classList.add('hidden');
+    document.getElementById('signup-success').classList.remove('hidden');
+  }
+</script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 100,
+      });
+    </script>
+
+  <!-- FAB back-to-top -->
+  <button id="back-to-top" class="mat-fab" aria-label="Back to top" title="Back to top">↑</button>
+
+
+  <script>
+    const fab = document.getElementById('back-to-top');
+    if(fab) {
+      window.addEventListener('scroll', () => {
+        if(window.scrollY > 400) fab.classList.add('visible');
+        else fab.classList.remove('visible');
+        // navbar elevation
+        const nav = document.querySelector('.mat-navbar, header');
+        if(nav) nav.classList.toggle('scrolled', window.scrollY > 10);
+      });
+      fab.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
+  </script>
+
+</body>
+
+</html>
