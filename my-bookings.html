@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bookings – Voyage</title>
+  <meta name="description" content="View your past and upcoming bookings.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { poppins: ['Inter','sans-serif'], volkhov: ['Outfit','sans-serif'] } } }
+    }
+  </script>
+  <style>body{margin:0;padding:0;overflow-x:hidden}</style>
+  <link rel="stylesheet" href="voyage.css">
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-white to-orange-50/40 text-slate-800 antialiased min-h-screen flex flex-col">
+
+<!-- NAV -->
+<header class="mat-navbar sticky top-0 z-50">
+  <div class="p-5 sm:px-16 sm:py-4 flex items-center justify-between max-w-[90rem] mx-auto font-poppins">
+    <a href="index.html" class="text-[#181E4B] font-volkhov font-bold text-3xl">Voyage.</a>
+    <nav class="hidden lg:flex items-center space-x-10">
+      <a href="about.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">About</a>
+      <a href="destinations.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Destinations</a>
+      <a href="hotels.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Hotels</a>
+      <a href="flights.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Flights</a>
+      <a href="bookings.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Bookings</a>
+      <a href="login.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Login</a>
+      <a href="signup.html" class="mat-btn mat-btn-outlined">Signup</a>
+    </nav>
+    <button id="mob-btn" class="lg:hidden flex flex-col gap-1.5 p-2">
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+      <span class="w-6 h-0.5 bg-slate-800 block"></span>
+    </button>
+  </div>
+  <div id="mob-menu" class="hidden lg:hidden bg-white border-t px-6 py-4 space-y-3 font-poppins">
+    <a href="destinations.html" class="block text-slate-700 hover:text-orange-500">Destinations</a>
+    <a href="hotels.html" class="block text-slate-700 hover:text-orange-500">Hotels</a>
+    <a href="flights.html" class="block text-slate-700 hover:text-orange-500">Flights</a>
+    <a href="bookings.html" class="block text-slate-700 hover:text-orange-500">Bookings</a>
+    <a href="login.html" class="block text-slate-700 hover:text-orange-500">Login</a>
+    <a href="signup.html" class="block font-medium border-2 border-slate-800 rounded-xl px-4 py-2 text-center">Signup</a>
+  </div>
+</header>
+
+<main class="flex-grow p-6 sm:p-20">
+  <div class="max-w-5xl mx-auto space-y-8 font-poppins">
+    <h1 class="font-volkhov text-4xl sm:text-5xl font-bold text-[#181E4B]">My Bookings</h1>
+    <p class="text-slate-500 text-lg">Manage your upcoming and past trips.</p>
+
+    <!-- Table Container -->
+    <div class="bg-white rounded-[2rem] shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm text-slate-600">
+          <thead class="text-xs text-slate-400 uppercase bg-slate-50 font-bold border-b border-slate-100">
+            <tr>
+              <th class="px-6 py-4">ID</th>
+              <th class="px-6 py-4">Destination</th>
+              <th class="px-6 py-4">Travellers</th>
+              <th class="px-6 py-4">Departure</th>
+              <th class="px-6 py-4">Amount</th>
+              <th class="px-6 py-4">Status</th>
+            </tr>
+          </thead>
+          <tbody id="bookings-tbody" class="divide-y divide-slate-100">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+      <div id="empty-state" class="hidden py-16 text-center">
+        <p class="text-4xl mb-4">🧳</p>
+        <p class="font-volkhov font-bold text-xl text-[#181E4B]">No bookings yet</p>
+        <p class="text-slate-500 mt-2 mb-6">Time to start planning your next adventure!</p>
+        <a href="destinations.html" class="bg-gradient-to-r from-[#F1A501] to-[#FF946D] text-white font-bold rounded-xl px-6 py-3 hover:-translate-y-0.5 transition-all inline-block">Explore Destinations</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="text-center py-8 text-sm text-slate-500 font-poppins border-t border-slate-100 bg-white">
+  © 2024 Voyage. All rights reserved. Made with 🥰
+</footer>
+
+<script src="js/api.js?v=5"></script>
+<script src="js/auth-nav.js?v=3"></script>
+<script>
+  document.getElementById('mob-btn').addEventListener('click', () => {
+    document.getElementById('mob-menu').classList.toggle('hidden');
+  });
+
+  (async function loadMyBookings() {
+    try {
+      const sess = await checkSession();
+      if (!sess.success) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      const list = await getBookings();
+      const tbody = document.getElementById('bookings-tbody');
+      const emptyState = document.getElementById('empty-state');
+      
+      if (!list || list.length === 0) {
+        emptyState.classList.remove('hidden');
+      } else {
+        list.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-50/50 transition-colors';
+          
+          let statusBadge = '';
+          if (item.status === 'Confirmed') statusBadge = '<span class="bg-emerald-50 text-emerald-600 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Confirmed</span>';
+          else if (item.status === 'Pending') statusBadge = '<span class="bg-amber-50 text-amber-600 border border-amber-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Pending</span>';
+          else statusBadge = '<span class="bg-red-50 text-red-600 border border-red-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Cancelled</span>';
+
+          tr.innerHTML = `
+            <td class="px-6 py-4 font-medium text-slate-500 font-mono">#${item.id}</td>
+            <td class="px-6 py-4 font-bold text-slate-800">${item.destination_name}</td>
+            <td class="px-6 py-4">${item.travellers} Person(s)</td>
+            <td class="px-6 py-4">${item.departure_date ? new Date(item.departure_date).toLocaleDateString() : 'N/A'}</td>
+            <td class="px-6 py-4 font-bold text-indigo-600">${item.amount}</td>
+            <td class="px-6 py-4">${statusBadge}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    } catch (e) {
+      console.error(e);
+      document.getElementById('empty-state').innerHTML = '<p class="text-red-500">Failed to load bookings. Please try again later.</p>';
+      document.getElementById('empty-state').classList.remove('hidden');
+    }
+  })();
+</script>
+</body>
+</html>

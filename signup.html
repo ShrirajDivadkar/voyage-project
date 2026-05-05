@@ -139,12 +139,14 @@
         </button>
       </form>
 
+      <!-- Error -->
+      <div id="signup-error" class="hidden mt-3 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700 font-medium"></div>
+
       <!-- Success -->
       <div id="signup-success" class="hidden text-center py-6">
         <p class="text-5xl mb-3">🎊</p>
-        <p class="font-bold text-green-600 text-xl font-volkhov">Account Created!</p>
-        <p class="text-slate-500 mt-2 text-sm">Welcome to Voyage! Ready to explore India?</p>
-        <a href="destinations.html" class="mt-4 inline-block bg-gradient-to-r from-[#F1A501] to-[#FF946D] text-white font-semibold rounded-xl px-6 py-2.5 hover:shadow-lg transition-all duration-300">Explore Destinations</a>
+        <p class="font-bold text-green-600 text-xl font-volkhov">Welcome to Voyage, <span id="signup-success-name">Traveller</span>!</p>
+        <p class="text-slate-500 mt-2 text-sm">Account created! Redirecting to destinations…</p>
       </div>
 
       <!-- Perks -->
@@ -176,15 +178,68 @@
   © 2024 Voyage. All rights reserved.
 </footer>
 
+<script src="js/api.js?v=5"></script>
+<script src="js/auth-nav.js?v=3"></script>
 <script>
   document.getElementById('mob-btn').addEventListener('click', () => {
     document.getElementById('mob-menu').classList.toggle('hidden');
   });
 
-  function handleSignup(e) {
+  /* ── Redirect if already logged in ───────────────────────── */
+  (async () => {
+    try {
+      const res = await checkSession();
+      if (res && res.success) {
+        sessionStorage.setItem('voyage_session', JSON.stringify({ role: res.role, name: res.name }));
+        window.location.href = res.role === 'admin' ? 'admin.html' : 'index.html';
+      }
+    } catch (_) {}
+  })();
+
+  async function handleSignup(e) {
     e.preventDefault();
+    const inputs  = e.target.querySelectorAll('input');
+    const fname   = inputs[0].value.trim();
+    const lname   = inputs[1].value.trim();
+    const email   = inputs[2].value.trim();
+    const pass    = inputs[3].value;
+    const confirm = inputs[4].value;
+    const btn     = e.target.querySelector('button[type="submit"]');
+    const errEl   = document.getElementById('signup-error');
+
+    errEl.classList.add('hidden');
+
+    if (pass !== confirm) {
+      errEl.textContent = '❌ Passwords do not match.';
+      errEl.classList.remove('hidden');
+      return;
+    }
+
+    btn.textContent = 'Creating account…';
+    btn.disabled = true;
+
+    const res = await signupUser(fname + ' ' + lname, email, pass);
+
+    btn.textContent = 'Create Account →';
+    btn.disabled = false;
+
+    if (!res.success) {
+      errEl.textContent = '❌ ' + (res.error || 'Signup failed.');
+      errEl.classList.remove('hidden');
+      return;
+    }
+
+    /* Cache session */
+    sessionStorage.setItem('voyage_session', JSON.stringify({ role: 'user', name: fname + ' ' + lname }));
+
     document.getElementById('signup-form').classList.add('hidden');
-    document.getElementById('signup-success').classList.remove('hidden');
+    const successEl = document.getElementById('signup-success');
+    const nameEl    = document.getElementById('signup-success-name');
+    if (nameEl) nameEl.textContent = fname;
+    successEl.classList.remove('hidden');
+
+    /* Auto-redirect to destinations */
+    setTimeout(() => { window.location.href = 'destinations.html'; }, 2000);
   }
 </script>
 

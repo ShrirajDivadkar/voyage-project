@@ -82,6 +82,21 @@
   </div>
 </section>
 
+<!-- SEARCH BAR -->
+<section data-aos="fade-up" class="px-6 sm:px-16 -mt-8 relative z-20">
+  <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-4 flex flex-col sm:flex-row gap-4 border border-slate-100">
+    <div class="flex-1 relative">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+        <svg class="h-5 w-5 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <input type="text" id="search-input" class="block w-full pl-11 pr-3 py-3 border-0 rounded-xl bg-slate-50 text-slate-700 placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:bg-white transition-colors" placeholder="Search for available packages (e.g. Goa, Manali)..." onkeypress="if(event.key === 'Enter') performSearch()">
+    </div>
+    <button onclick="performSearch()" class="mat-btn mat-btn-primary w-full sm:w-auto px-8 whitespace-nowrap">Search Packages</button>
+  </div>
+</section>
+
 <!-- DESTINATIONS GRID (dynamic – powered by localStorage) -->
 <section data-aos="fade-up" class="p-6 sm:p-20">
   <div id="destinations-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -95,87 +110,113 @@
   © 2024 Voyage. All rights reserved. Made with 🥰
 </footer>
 
-<script src="js/data.js"></script>
+<script src="js/api.js?v=5"></script>
+<script src="js/auth-nav.js?v=3"></script>
 <script>
   document.getElementById('mob-btn').addEventListener('click', () => {
     document.getElementById('mob-menu').classList.toggle('hidden');
   });
 
   // ── Render destination cards dynamically ──────────────────────────────────
-  (function renderDests() {
-    const dests = getDestinations();
-    const grid  = document.getElementById('destinations-grid');
-    const empty = document.getElementById('no-destinations');
+  async function renderDests(query = '') {
+    try {
+      console.log('Fetching destinations...');
+      // Fetch destinations using the query and specifying that we only want available ones
+      const dests = await searchDestinations(query, true);
+      console.log('Destinations received:', dests);
+      
+      const grid  = document.getElementById('destinations-grid');
+      const empty = document.getElementById('no-destinations');
 
-    if (!dests || !dests.length) {
-      grid.classList.add('hidden');
-      empty.classList.remove('hidden');
-      return;
-    }
+      if (!dests || !Array.isArray(dests) || !dests.length) {
+        console.warn('No destinations found or invalid response:', dests);
+        grid.classList.add('hidden');
+        empty.classList.remove('hidden');
+        return;
+      }
 
-    grid.innerHTML = '';
-    dests.forEach((d, i) => {
-      const delay   = [400, 200, 300, 200, 100, 200][i % 6];
-      const detailId = 'details-' + d.id;
-      const btnId    = 'learn-btn-' + d.id;
+      grid.innerHTML = '';
+      dests.forEach((d, i) => {
+        const delay   = [100, 200, 300, 400, 500, 600][i % 6];
+        const detailId = 'details-' + d.id;
+        const btnId    = 'learn-btn-' + d.id;
 
-      // Build details bullet list (fallback for legacy entries)
-      const detailItems = Array.isArray(d.details) && d.details.length
-        ? d.details.map(item => `<li class="flex gap-2 leading-snug"><span class="shrink-0"></span><span>${item}</span></li>`).join('')
-        : `<li class="text-slate-400 italic">No additional details available for this tour.</li>`;
+        // Build details bullet list
+        const details = d.details || [];
+        const detailItems = details.length
+          ? details.map(item => `<li class="flex gap-2 leading-snug"><span class="shrink-0">✅</span><span>${item}</span></li>`).join('')
+          : `<li class="text-slate-400 italic">No additional details available for this tour.</li>`;
 
-      const card = document.createElement('div');
-      card.setAttribute('data-aos', 'fade-up');
-      card.setAttribute('data-aos-delay', delay);
-      card.className = 'mat-card flex flex-col overflow-hidden cursor-default group';
-      card.innerHTML = `
-        <div class="overflow-hidden rounded-t-[2rem] h-64 relative">
-          <img src="${d.image}" alt="${d.title}"
-               class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-               onerror="this.src='https://via.placeholder.com/400x260?text=${encodeURIComponent(d.title)}'"/>
-        </div>
-        <div class="p-7 space-y-2 flex flex-col flex-1">
-          <div class="flex justify-between items-center font-poppins">
-            <p class="font-bold text-slate-800 text-lg">${d.title}</p>
-            <span class="badge-price">${d.price}</span>
+        const seatBadge = (d.seats_available !== undefined && d.seats_available > 0)
+          ? `<div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-green-600 px-3 py-1 rounded-full text-xs font-bold shadow-sm z-10 hidden group-hover:block">🎫 ${d.seats_available} Seats Left</div>`
+          : `<div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-red-500 px-3 py-1 rounded-full text-xs font-bold shadow-sm z-10 hidden group-hover:block">❌ Sold Out</div>`;
+
+        const card = document.createElement('div');
+        card.setAttribute('data-aos', 'fade-up');
+        card.setAttribute('data-aos-delay', delay);
+        card.className = 'mat-card flex flex-col overflow-hidden cursor-default group';
+        card.innerHTML = `
+          <div class="overflow-hidden rounded-t-[2rem] h-64 relative">
+            ${seatBadge}
+            <img src="${d.image}" alt="${d.title}"
+                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                 onerror="this.src='https://via.placeholder.com/400x260?text=${encodeURIComponent(d.title)}'"/>
           </div>
-          <p class="text-slate-500 text-sm">${d.description}</p>
-          <p class="text-slate-400 text-xs font-medium">✈ ${d.duration}</p>
+          <div class="p-7 space-y-2 flex flex-col flex-1">
+            <div class="flex justify-between items-center font-poppins">
+              <p class="font-bold text-slate-800 text-lg">${d.title}</p>
+              <span class="badge-price">${d.price}</span>
+            </div>
+            <p class="text-slate-500 text-sm line-clamp-3">${d.description}</p>
+            <p class="text-slate-400 text-xs font-medium">✈️ ${d.duration}</p>
 
-          <!-- Action buttons -->
-          <div class="flex gap-2 pt-1">
-            <a href="bookings.html" class="mat-btn mat-btn-primary ripple flex-1 text-center">Book Now</a>
-            <button
-              id="${btnId}"
-              onclick="toggleLearnMore('${d.id}')"
-              class="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border-2 border-slate-200 text-slate-600 font-semibold text-sm hover:border-orange-400 hover:text-orange-500 transition-all duration-200 whitespace-nowrap"
-              aria-expanded="false"
-              aria-controls="${detailId}"
+            <!-- Action buttons -->
+            <div class="flex gap-2 pt-1">
+              <a href="bookings.html?type=destination&id=${d.id}" class="mat-btn mat-btn-primary ripple flex-1 text-center">Book Now</a>
+              <button
+                id="${btnId}"
+                onclick="toggleLearnMore('${d.id}')"
+                class="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border-2 border-slate-200 text-slate-600 font-semibold text-sm hover:border-orange-400 hover:text-orange-500 transition-all duration-200 whitespace-nowrap"
+                aria-expanded="false"
+                aria-controls="${detailId}"
+              >
+                Learn More
+                <svg id="chevron-${d.id}" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Accordion drop-down -->
+            <div
+              id="${detailId}"
+              style="max-height:0; overflow:hidden; transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease; opacity:0;"
             >
-              Learn More
-              <svg id="chevron-${d.id}" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-              </svg>
-            </button>
-          </div>
-
-          <!-- Accordion drop-down -->
-          <div
-            id="${detailId}"
-            style="max-height:0; overflow:hidden; transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease; opacity:0;"
-          >
-            <div class="mt-3 rounded-2xl bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-100 p-5">
-              <p class="text-xs font-bold text-orange-500 uppercase tracking-widest mb-3">📋 Tour Itinerary & Highlights</p>
-              <ul class="space-y-2 text-sm text-slate-600 list-none">
-                ${detailItems}
-              </ul>
+              <div class="mt-3 rounded-2xl bg-gradient-to-br from-orange-50 to-amber-50 border border-orange-100 p-5">
+                <p class="text-xs font-bold text-orange-500 uppercase tracking-widest mb-3">📋 Tour Itinerary & Highlights</p>
+                <ul class="space-y-2 text-sm text-slate-600 list-none">
+                  ${detailItems}
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-      `;
-      grid.appendChild(card);
-    });
-  })();
+        `;
+        grid.appendChild(card);
+      });
+
+      // Refresh AOS to recognize dynamic elements
+      if (typeof AOS !== 'undefined') {
+        AOS.refresh();
+      }
+    } catch (err) {
+      console.error('Error in renderDests:', err);
+      const empty = document.getElementById('no-destinations');
+      if (empty) {
+        empty.textContent = 'Failed to load destinations. Please ensure the local server (XAMPP) is running and accessible.';
+        empty.classList.remove('hidden');
+      }
+    }
+  }
 
   // ── Toggle Learn More accordion ──────────────────────────────────────────────
   function toggleLearnMore(destId) {
@@ -201,6 +242,14 @@
     }
   }
 
+  // ── Search handler ──────────────────────────────────────────────────────────
+  function performSearch() {
+    const query = document.getElementById('search-input').value.trim();
+    renderDests(query);
+  }
+
+  // Initialize
+  renderDests();
 </script>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

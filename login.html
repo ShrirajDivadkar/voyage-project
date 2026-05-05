@@ -126,11 +126,14 @@
         </button>
       </form>
 
+      <!-- Error -->
+      <div id="login-error" class="hidden mt-3 px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700 font-medium"></div>
+
       <!-- Success -->
       <div id="login-success" class="hidden text-center py-4">
         <p class="text-4xl mb-2">✅</p>
-        <p class="font-bold text-green-600 text-lg font-volkhov">Logged in successfully!</p>
-        <a href="index.html" class="text-orange-500 text-sm hover:underline mt-1 inline-block">Go to homepage →</a>
+        <p class="font-bold text-green-600 text-lg font-volkhov">Welcome back, <span id="login-success-name">Traveller</span>!</p>
+        <p class="text-slate-500 text-sm mt-1">Redirecting you now…</p>
       </div>
 
       <p class="text-center text-sm text-slate-500 mt-6">
@@ -146,27 +149,68 @@
   © 2024 Voyage. All rights reserved.
 </footer>
 
-<script src="js/data.js"></script>
+<script src="js/api.js?v=5"></script>
+<script src="js/auth-nav.js?v=3"></script>
 <script>
   document.getElementById('mob-btn').addEventListener('click', () => {
     document.getElementById('mob-menu').classList.toggle('hidden');
   });
 
-  function handleLogin(e) {
+  /* ── Redirect if already logged in ───────────────────────── */
+  (async () => {
+    try {
+      const res = await checkSession();
+      if (res && res.success) {
+        sessionStorage.setItem('voyage_session', JSON.stringify({ role: res.role, name: res.name }));
+        window.location.href = res.role === 'admin' ? 'admin.html' : 'index.html';
+      }
+    } catch (_) {}
+  })();
+
+  async function handleLogin(e) {
     e.preventDefault();
-    const email = document.getElementById('login-email').value;
+    const email = document.getElementById('login-email').value.trim();
     const pass  = document.getElementById('login-pass').value;
+    const btn   = e.target.querySelector('button[type="submit"]');
+    const errEl = document.getElementById('login-error');
 
-    if (isAdminCredentials(email, pass)) {
-      // Admin: redirect to dashboard
-      sessionStorage.setItem('voyage_admin', 'true');
-      window.location.href = 'admin.html';
-      return;
+    errEl.classList.add('hidden');
+    btn.textContent = 'Signing in…';
+    btn.disabled = true;
+
+    try {
+      const res = await loginUser(email, pass);
+
+      btn.textContent = 'Sign In';
+      btn.disabled = false;
+
+      if (!res.success) {
+        errEl.textContent = '❌ ' + (res.error || 'Login failed.');
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      /* Cache session locally */
+      sessionStorage.setItem('voyage_session', JSON.stringify({ role: res.role, name: res.name }));
+
+      /* Show success then redirect */
+      e.target.classList.add('hidden');
+      const successEl = document.getElementById('login-success');
+      const nameEl    = document.getElementById('login-success-name');
+      if (nameEl) nameEl.textContent = res.name || 'Traveller';
+      successEl.classList.remove('hidden');
+
+      setTimeout(() => {
+        window.location.href = res.role === 'admin' ? 'admin.html' : 'index.html';
+      }, 1500);
+
+    } catch (error) {
+      console.error(error);
+      btn.textContent = 'Sign In';
+      btn.disabled = false;
+      errEl.textContent = '❌ Network error or server unreachable. Please try again.';
+      errEl.classList.remove('hidden');
     }
-
-    // Regular user: show success panel
-    e.target.classList.add('hidden');
-    document.getElementById('login-success').classList.remove('hidden');
   }
 </script>
 

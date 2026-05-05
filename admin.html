@@ -17,7 +17,7 @@
     * { box-sizing: border-box; }
     body { margin: 0; padding: 0; overflow-x: hidden; }
 
-    /* ── Sidebar ── */
+    /* Sidebar */
     #sidebar {
       position: fixed; top: 0; left: 0; height: 100vh; width: 260px;
       background: linear-gradient(160deg, #181E4B 0%, #2d3680 60%, #1e2355 100%);
@@ -35,10 +35,10 @@
     .sidebar-link.active { background: linear-gradient(90deg,#F1A501,#FF946D); color: #fff; box-shadow: 0 4px 14px rgba(241,165,1,.35); }
     .sidebar-link .icon { font-size: 1.2rem; width: 24px; text-align: center; }
 
-    /* ── Main content ── */
+    /* Main content */
     #main { margin-left: 260px; min-height: 100vh; background: #f1f4f9; transition: margin .3s; }
 
-    /* ── Top bar ── */
+    /* Top bar */
     #topbar {
       position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.85);
       backdrop-filter: blur(12px); border-bottom: 1px solid #e8ecf4;
@@ -46,7 +46,7 @@
       padding: 16px 32px; gap: 16px;
     }
 
-    /* ── Stat cards ── */
+    /* Stat cards */
     .stat-card {
       background: #fff; border-radius: 20px; padding: 24px 28px;
       box-shadow: 0 2px 16px rgba(0,0,0,.06); border: 1px solid #edf0f7;
@@ -54,13 +54,13 @@
     }
     .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,.1); }
 
-    /* ── Section card ── */
+    /* Section card */
     .section-card {
       background: #fff; border-radius: 24px; padding: 32px;
       box-shadow: 0 2px 16px rgba(0,0,0,.06); border: 1px solid #edf0f7;
     }
 
-    /* ── Table ── */
+    /* Table */
     .admin-table { width: 100%; border-collapse: collapse; font-size: .875rem; }
     .admin-table th { background: #f8faff; color: #64748b; font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; padding: 12px 16px; text-align: left; border-bottom: 2px solid #e8ecf4; }
     .admin-table td { padding: 14px 16px; border-bottom: 1px solid #f0f2f8; color: #374151; vertical-align: middle; }
@@ -71,7 +71,7 @@
     .status-Pending   { background: #fef9c3; color: #ca8a04; }
     .status-Cancelled { background: #fee2e2; color: #dc2626; }
 
-    /* ── Dest cards ── */
+    /* Dest cards */
     .dest-admin-card {
       background: #fff; border-radius: 20px; overflow: hidden;
       border: 1px solid #e8ecf4; box-shadow: 0 2px 12px rgba(0,0,0,.05);
@@ -80,7 +80,7 @@
     .dest-admin-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,.1); }
     .dest-admin-card img { width: 100%; height: 160px; object-fit: cover; display: block; }
 
-    /* ── Modal ── */
+    /* Modal */
     #modal-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
       z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px;
@@ -93,7 +93,7 @@
     }
     @keyframes popIn { from { transform: scale(.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-    /* ── Form inputs ── */
+    /* Form inputs */
     .adm-input {
       width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px;
       padding: 10px 14px; font-size: .9rem; color: #1e293b; outline: none; transition: border-color .2s;
@@ -102,7 +102,7 @@
     .adm-input:focus { border-color: #F1A501; }
     .adm-label { display: block; font-size: .75rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
 
-    /* ── Btn ── */
+    /* Buttons */
     .adm-btn-primary {
       background: linear-gradient(90deg, #F1A501, #FF946D);
       color: #fff; font-weight: 700; border: none; border-radius: 14px;
@@ -129,20 +129,20 @@
     }
     .adm-btn-ghost:hover { border-color: #94a3b8; color: #1e293b; }
 
-    /* ── Tabs ── */
+    /* Tabs */
     .tab-btn { padding: 8px 20px; border-radius: 12px; font-weight: 600; font-size: .875rem; cursor: pointer; border: none; transition: all .2s; font-family: 'Inter', sans-serif; }
     .tab-btn.active { background: linear-gradient(90deg,#F1A501,#FF946D); color: #fff; box-shadow: 0 4px 12px rgba(241,165,1,.35); }
     .tab-btn:not(.active) { background: #f1f4f9; color: #64748b; }
     .tab-btn:not(.active):hover { background: #e2e8f0; }
 
-    /* ── Responsive ── */
+    /* Responsive */
     @media (max-width: 768px) {
       #sidebar { transform: translateX(-100%); }
       #sidebar.mob-open { transform: translateX(0); }
       #main { margin-left: 0; }
     }
 
-    /* ── Toast ── */
+    /* Toast */
     #toast {
       position: fixed; bottom: 24px; right: 24px; z-index: 300;
       background: #1e293b; color: #fff; padding: 14px 22px;
@@ -201,7 +201,7 @@
   <!-- Top Bar -->
   <header id="topbar">
     <div class="flex items-center gap-4">
-      <button id="mob-menu-btn" class="md:hidden text-slate-600 text-xl" onclick="toggleSidebar()">☰</button>
+      <button id="mob-menu-btn" class="md:hidden text-slate-600 text-xl" onclick="toggleSidebar()">&#9776;</button>
       <div>
         <h1 id="page-title" class="font-volkhov text-xl font-bold text-[#181E4B]">Overview</h1>
         <p id="page-sub" class="text-slate-400 text-xs mt-0.5">Welcome back, Admin 👋</p>
@@ -218,7 +218,7 @@
 
   <div class="p-6 sm:p-10 space-y-8">
 
-    <!-- ═══ OVERVIEW TAB ═══ -->
+    <!-- ─── OVERVIEW TAB ─── -->
     <section id="tab-overview">
 
       <!-- Stat cards -->
@@ -249,7 +249,7 @@
       <div class="section-card">
         <div class="flex items-center justify-between mb-6">
           <h2 class="font-volkhov text-xl font-bold text-[#181E4B]">Recent Bookings</h2>
-          <button class="text-orange-500 text-sm font-semibold hover:underline" onclick="showTab('bookings')">View all →</button>
+          <button class="text-orange-500 text-sm font-semibold hover:underline" onclick="showTab('bookings')">View all &rarr;</button>
         </div>
         <div class="overflow-x-auto">
           <table class="admin-table" id="overview-bookings-table">
@@ -271,14 +271,14 @@
       <div class="section-card mt-6">
         <div class="flex items-center justify-between mb-6">
           <h2 class="font-volkhov text-xl font-bold text-[#181E4B]">Top Destinations by Bookings</h2>
-          <button class="text-orange-500 text-sm font-semibold hover:underline" onclick="showTab('tours')">Manage →</button>
+          <button class="text-orange-500 text-sm font-semibold hover:underline" onclick="showTab('tours')">Manage &rarr;</button>
         </div>
         <div id="top-dests-list" class="space-y-3"></div>
       </div>
 
     </section>
 
-    <!-- ═══ BOOKINGS TAB ═══ -->
+    <!-- ─── BOOKINGS TAB ─── -->
     <section id="tab-bookings" class="hidden">
       <div class="section-card">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -311,7 +311,7 @@
       </div>
     </section>
 
-    <!-- ═══ MANAGE TOURS TAB ═══ -->
+    <!-- ─── MANAGE TOURS TAB ─── -->
     <section id="tab-tours" class="hidden">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <h2 class="font-volkhov text-2xl font-bold text-[#181E4B]">Manage Tours</h2>
@@ -343,7 +343,7 @@
         </div>
         <div>
           <label class="adm-label">Price *</label>
-          <input id="form-price" class="adm-input" type="text" placeholder="e.g. ₹45,000" required>
+          <input id="form-price" class="adm-input" type="text" placeholder="e.g. &#8377;45,000" required>
         </div>
         <div>
           <label class="adm-label">Duration *</label>
@@ -363,7 +363,7 @@
         </div>
         <div class="sm:col-span-2">
           <label class="adm-label">Tour Details / Highlights <span class="normal-case font-normal text-slate-400">(one line per bullet — shown in "Learn More")</span></label>
-          <textarea id="form-details" class="adm-input" rows="6" placeholder="🛬 Day 1: Arrival & check-in&#10;🏖️ Day 2: Beach exploration&#10;✅ Includes: Flights · Hotel · Guide" style="resize:vertical"></textarea>
+          <textarea id="form-details" class="adm-input" rows="6" placeholder="✈️ Day 1: Arrival &amp; check-in&#10;🏖️ Day 2: Beach exploration&#10;✅ Includes: Flights · Hotel · Guide" style="resize:vertical"></textarea>
         </div>
       </div>
       <div class="flex gap-3 pt-2">
@@ -378,17 +378,29 @@
 <div id="toast"></div>
 
 <!-- data layer -->
-<script src="js/data.js"></script>
+<script src="js/api.js"></script>
 <script>
-  // ── Auth guard ──────────────────────────────────────────────────────────────
-  if (!sessionStorage.getItem('voyage_admin')) {
-    alert('⛔ Access denied. Please log in as admin.');
-    window.location.href = 'login.html';
-  }
+  // Auth guard via PHP session
+  (async () => {
+    try {
+      const s = await checkSession();
+      if (!s.success || s.role !== 'admin') {
+        alert('Access denied. Please log in as admin.');
+        window.location.href = 'login.html';
+      }
+    } catch (e) {
+      alert('Session check failed or network error. Please log in again.');
+      window.location.href = 'login.html';
+    }
+  })();
 
-  // ── Tab management ──────────────────────────────────────────────────────────
+  // Tab management
   const tabs = ['overview', 'bookings', 'tours'];
-  const tabTitles = { overview: ['Overview', 'Welcome back, Admin 👋'], bookings: ['Bookings', 'All traveller bookings'], tours: ['Manage Tours', 'Add, edit or remove destination tours'] };
+  const tabTitles = {
+    overview: ['Overview', 'Welcome back, Admin 👋'],
+    bookings: ['Bookings', 'All traveller bookings'],
+    tours:    ['Manage Tours', 'Add, edit or remove destination tours']
+  };
 
   function showTab(name) {
     tabs.forEach(t => {
@@ -402,7 +414,6 @@
     if (name === 'bookings') renderBookingsTable('All');
     if (name === 'tours')    renderDestCards();
     if (name === 'overview') renderOverview();
-    // Close mobile sidebar
     document.getElementById('sidebar').classList.remove('mob-open');
   }
 
@@ -410,37 +421,35 @@
     document.getElementById('sidebar').classList.toggle('mob-open');
   }
 
-  // ── Overview ─────────────────────────────────────────────────────────────────
-  function renderOverview() {
-    const bookings = getBookings();
-    const dests    = getDestinations();
-    document.getElementById('stat-bookings').textContent  = bookings.length;
-    document.getElementById('stat-tours').textContent     = dests.length;
-    document.getElementById('stat-confirmed').textContent = bookings.filter(b => b.status === 'Confirmed').length;
-    document.getElementById('stat-pending').textContent   = bookings.filter(b => b.status === 'Pending').length;
+  // Overview
+  async function renderOverview() {
+    const stats = await getStats();
 
-    // Recent 5 bookings
+    document.getElementById('stat-bookings').textContent  = stats.total_bookings;
+    document.getElementById('stat-tours').textContent     = stats.total_tours;
+    document.getElementById('stat-confirmed').textContent = stats.confirmed;
+    document.getElementById('stat-pending').textContent   = stats.pending;
+
     const tbody = document.getElementById('overview-bookings-body');
     tbody.innerHTML = '';
-    bookings.slice(0, 5).forEach(b => {
+    (stats.recent_bookings || []).forEach(b => {
       const row = document.createElement('tr');
       row.innerHTML = `
-        <td class="font-medium">${b.traveller}</td>
-        <td>${b.destination}</td>
-        <td>${b.departure}</td>
-        <td class="font-semibold text-orange-500">${b.amount}</td>
+        <td class="font-medium">${b.traveller_name}</td>
+        <td>${b.destination_name}</td>
+        <td>${b.departure_date || '—'}</td>
+        <td class="font-semibold text-orange-500">${b.amount || '—'}</td>
         <td><span class="status-badge status-${b.status}">${statusDot(b.status)} ${b.status}</span></td>
       `;
       tbody.appendChild(row);
     });
 
-    // Top dests by bookings
     const list = document.getElementById('top-dests-list');
     list.innerHTML = '';
-    const sorted = [...dests].sort((a, b) => (b.bookings || 0) - (a.bookings || 0)).slice(0, 5);
-    const maxB = sorted[0]?.bookings || 1;
-    sorted.forEach((d, i) => {
-      const pct = Math.round(((d.bookings || 0) / maxB) * 100);
+    const top = stats.top_destinations || [];
+    const maxB = top[0]?.bookings_count || 1;
+    top.forEach((d, i) => {
+      const pct = Math.round(((d.bookings_count || 0) / maxB) * 100);
       list.innerHTML += `
         <div class="flex items-center gap-4">
           <span class="text-slate-400 text-sm font-bold w-5">${i+1}</span>
@@ -448,7 +457,7 @@
           <div class="flex-1 min-w-0">
             <div class="flex justify-between mb-1">
               <span class="text-sm font-semibold text-slate-700 truncate">${d.title}</span>
-              <span class="text-xs text-slate-400 font-medium ml-2">${d.bookings || 0} bookings</span>
+              <span class="text-xs text-slate-400 font-medium ml-2">${d.bookings_count || 0} bookings</span>
             </div>
             <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
               <div class="h-full rounded-full bg-gradient-to-r from-orange-400 to-amber-400" style="width:${pct}%"></div>
@@ -459,19 +468,17 @@
     });
   }
 
-  // ── Bookings table ────────────────────────────────────────────────────────────
+  // Bookings table
+  let _allBookings = [];
   let _currentFilter = 'All';
 
-  function filterBookings(status) {
+  async function renderBookingsTable(status) {
+    if (!_allBookings.length) _allBookings = await getBookings();
     _currentFilter = status;
     document.querySelectorAll('#tab-bookings .tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('filter-' + (status === 'All' ? 'all' : status)).classList.add('active');
-    renderBookingsTable(status);
-  }
 
-  function renderBookingsTable(status) {
-    const all = getBookings();
-    const rows = status === 'All' ? all : all.filter(b => b.status === status);
+    const rows = status === 'All' ? _allBookings : _allBookings.filter(b => b.status === status);
     const tbody = document.getElementById('bookings-table-body');
     tbody.innerHTML = '';
     if (!rows.length) {
@@ -482,33 +489,39 @@
       tbody.innerHTML += `
         <tr>
           <td class="text-slate-400">${i+1}</td>
-          <td class="font-semibold text-slate-800">${b.traveller}</td>
+          <td class="font-semibold text-slate-800">${b.traveller_name}</td>
           <td class="text-slate-500">${b.email}</td>
-          <td>${b.destination}</td>
-          <td>${b.duration}</td>
+          <td>${b.destination_name || '—'}</td>
+          <td>${b.duration || '—'}</td>
           <td>${b.travellers}</td>
-          <td>${b.departure}</td>
-          <td class="font-bold text-orange-500">${b.amount}</td>
+          <td>${b.departure_date || '—'}</td>
+          <td class="font-bold text-orange-500">${b.amount || '—'}</td>
           <td><span class="status-badge status-${b.status}">${statusDot(b.status)} ${b.status}</span></td>
         </tr>
       `;
     });
   }
 
+  function filterBookings(status) {
+    renderBookingsTable(status);
+  }
+
   function statusDot(s) {
     return s === 'Confirmed' ? '●' : s === 'Pending' ? '◐' : '○';
   }
 
-  // ── Destinations cards ────────────────────────────────────────────────────────
-  function renderDestCards() {
-    const dests = getDestinations();
-    const grid  = document.getElementById('dest-grid');
+  // Destinations cards
+  let _dests = [];
+
+  async function renderDestCards() {
+    _dests = await getDestinations();
+    const grid = document.getElementById('dest-grid');
     grid.innerHTML = '';
-    if (!dests.length) {
+    if (!_dests.length) {
       grid.innerHTML = `<p class="col-span-3 text-center text-slate-400 py-12">No tours added yet. Click "Add New Tour" to get started!</p>`;
       return;
     }
-    dests.forEach(d => {
+    _dests.forEach(d => {
       const card = document.createElement('div');
       card.className = 'dest-admin-card';
       card.innerHTML = `
@@ -525,8 +538,8 @@
           <div class="flex items-center justify-between gap-2">
             <span class="text-xs font-medium bg-orange-50 text-orange-600 border border-orange-100 px-2.5 py-1 rounded-full">${d.tag || '🗺️ Tour'}</span>
             <div class="flex gap-2">
-              <button class="adm-btn-edit" onclick="openEditModal('${d.id}')">✏️ Edit</button>
-              <button class="adm-btn-danger" onclick="deleteDest('${d.id}')">🗑️ Delete</button>
+              <button class="adm-btn-edit" onclick="openEditModal(${d.id})">✏️ Edit</button>
+              <button class="adm-btn-danger" onclick="deleteDest(${d.id})">🗑️ Delete</button>
             </div>
           </div>
         </div>
@@ -535,17 +548,18 @@
     });
   }
 
-  function deleteDest(id) {
-    const d = getDestinationById(id);
+  async function deleteDest(id) {
+    const d = _dests.find(x => x.id === id);
     if (!d) return;
-    if (!confirm(`Delete "${d.title}"? This will remove it from the destinations page too.`)) return;
-    deleteDestination(id);
+    if (!confirm(`Delete "${d.title}"? This cannot be undone.`)) return;
+    const res = await deleteDestination(id);
+    if (!res.success) { showToast('❌ ' + res.error); return; }
+    showToast(`✅ "${d.title}" deleted.`);
     renderDestCards();
     renderOverview();
-    showToast(`"${d.title}" deleted.`);
   }
 
-  // ── Modal ─────────────────────────────────────────────────────────────────────
+  // Modal
   let _editingId = null;
 
   function openAddModal() {
@@ -557,19 +571,19 @@
   }
 
   function openEditModal(id) {
-    const d = getDestinationById(id);
+    const d = _dests.find(x => x.id === id);
     if (!d) return;
     _editingId = id;
-    document.getElementById('modal-title').textContent = '✏️ Edit Tour';
-    document.getElementById('form-id').value          = d.id;
-    document.getElementById('form-title').value       = d.title;
-    document.getElementById('form-subtitle').value    = d.subtitle || '';
-    document.getElementById('form-price').value       = d.price;
-    document.getElementById('form-duration').value    = d.duration;
-    document.getElementById('form-tag').value         = d.tag || '';
-    document.getElementById('form-image').value       = d.image;
-    document.getElementById('form-description').value = d.description;
-    document.getElementById('form-details').value     = Array.isArray(d.details) ? d.details.join('\n') : (d.details || '');
+    document.getElementById('modal-title').textContent   = '✏️ Edit Tour';
+    document.getElementById('form-id').value             = d.id;
+    document.getElementById('form-title').value          = d.title;
+    document.getElementById('form-subtitle').value       = d.subtitle || '';
+    document.getElementById('form-price').value          = d.price;
+    document.getElementById('form-duration').value       = d.duration;
+    document.getElementById('form-tag').value            = d.tag || '';
+    document.getElementById('form-image').value          = d.image;
+    document.getElementById('form-description').value   = d.description;
+    document.getElementById('form-details').value       = Array.isArray(d.details) ? d.details.join('\n') : (d.details || '');
     document.getElementById('modal-overlay').classList.add('open');
   }
 
@@ -582,36 +596,37 @@
     if (e.target === document.getElementById('modal-overlay')) closeModal();
   }
 
-  function handleTourSubmit(e) {
+  async function handleTourSubmit(e) {
     e.preventDefault();
-    // Parse details: split by newline, filter blank lines
     const rawDetails = document.getElementById('form-details').value;
     const detailsArr = rawDetails.split('\n').map(l => l.trim()).filter(l => l.length > 0);
 
     const data = {
-      title      : document.getElementById('form-title').value.trim(),
-      subtitle   : document.getElementById('form-subtitle').value.trim(),
-      price      : document.getElementById('form-price').value.trim(),
-      duration   : document.getElementById('form-duration').value.trim(),
-      tag        : document.getElementById('form-tag').value.trim() || '🗺️ Tour',
-      image      : document.getElementById('form-image').value.trim() || 'https://via.placeholder.com/400x260?text=Tour',
+      title:       document.getElementById('form-title').value.trim(),
+      subtitle:    document.getElementById('form-subtitle').value.trim(),
+      price:       document.getElementById('form-price').value.trim(),
+      duration:    document.getElementById('form-duration').value.trim(),
+      tag:         document.getElementById('form-tag').value.trim() || '🗺️ Tour',
+      image:       document.getElementById('form-image').value.trim() || 'https://via.placeholder.com/400x260?text=Tour',
       description: document.getElementById('form-description').value.trim(),
-      details    : detailsArr.length ? detailsArr : ['No additional details available for this tour.'],
+      details:     detailsArr.length ? detailsArr : ['No additional details available for this tour.'],
     };
 
+    let res;
     if (_editingId) {
-      updateDestination(_editingId, data);
-      showToast(`"${data.title}" updated successfully!`);
+      res = await updateDestination(_editingId, data);
+      if (res.success) showToast(`✅ "${data.title}" updated!`);
     } else {
-      addDestination(data);
-      showToast(`"${data.title}" added!`);
+      res = await addDestination(data);
+      if (res.success) showToast(`✅ "${data.title}" added!`);
     }
+    if (!res.success) { showToast('❌ ' + res.error); return; }
     closeModal();
     renderDestCards();
     renderOverview();
   }
 
-  // ── Toast ─────────────────────────────────────────────────────────────────────
+  // Toast
   function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -619,16 +634,15 @@
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  // ── Logout ────────────────────────────────────────────────────────────────────
-  function adminLogout() {
-    sessionStorage.removeItem('voyage_admin');
+  // Logout
+  async function adminLogout() {
+    await logoutUser();
     window.location.href = 'login.html';
   }
 
-  // ── Init ──────────────────────────────────────────────────────────────────────
+  // Init
   renderOverview();
 
-  // Close sidebar on outside click (mobile)
   document.addEventListener('click', (e) => {
     const sidebar = document.getElementById('sidebar');
     const menuBtn = document.getElementById('mob-menu-btn');

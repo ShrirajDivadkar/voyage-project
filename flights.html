@@ -87,43 +87,44 @@
   <div class="hero-search glass-xl p-6 max-w-5xl mx-auto">
     <div class="flex gap-4 mb-5 font-poppins">
       <label class="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
-        <input type="radio" name="trip" checked class="accent-orange-500"> One Way
+        <input type="radio" name="trip" id="trip-oneway" checked class="accent-orange-500"> One Way
       </label>
       <label class="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
-        <input type="radio" name="trip" class="accent-orange-500"> Round Trip
+        <input type="radio" name="trip" id="trip-round" class="accent-orange-500"> Round Trip
       </label>
       <label class="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
-        <input type="radio" name="trip" class="accent-orange-500"> Multi-City
+        <input type="radio" name="trip" id="trip-multi" class="accent-orange-500"> Multi-City
       </label>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="col-span-1 sm:col-span-2 lg:col-span-1">
         <label class="block text-xs text-slate-500 font-poppins mb-1 font-medium uppercase tracking-wide">From</label>
-        <input type="text" placeholder="Delhi (DEL)" class="mat-input">
+        <input id="flight-from" type="text" placeholder="Delhi (DEL)" class="mat-input">
       </div>
       <div class="col-span-1 sm:col-span-2 lg:col-span-1">
         <label class="block text-xs text-slate-500 font-poppins mb-1 font-medium uppercase tracking-wide">To</label>
-        <input type="text" placeholder="Goa (GOI)" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-700 outline-none focus:border-orange-400 transition-colors">
+        <input id="flight-to" type="text" placeholder="Goa (GOI)" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-700 outline-none focus:border-orange-400 transition-colors">
       </div>
       <div>
         <label class="block text-xs text-slate-500 font-poppins mb-1 font-medium uppercase tracking-wide">Departure</label>
-        <input type="date" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-600 outline-none focus:border-orange-400 transition-colors">
+        <input id="flight-date" type="date" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-600 outline-none focus:border-orange-400 transition-colors">
       </div>
       <div>
         <label class="block text-xs text-slate-500 font-poppins mb-1 font-medium uppercase tracking-wide">Passengers</label>
-        <select class="w-full border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-700 outline-none focus:border-orange-400 transition-colors bg-white">
-          <option>1 Adult</option>
-          <option>2 Adults</option>
-          <option>3 Adults</option>
-          <option>4+ Adults</option>
+        <select id="flight-pax" class="w-full border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-700 outline-none focus:border-orange-400 transition-colors bg-white">
+          <option value="1">1 Adult</option>
+          <option value="2">2 Adults</option>
+          <option value="3">3 Adults</option>
+          <option value="4">4+ Adults</option>
         </select>
       </div>
     </div>
     <div class="mt-5 text-right">
-      <a href="bookings.html" class="mat-btn mat-btn-primary ripple">Search Flights</a>
+      <button onclick="searchFlights()" class="mat-btn mat-btn-primary ripple">Search Flights</button>
     </div>
   </div>
 </section>
+
 
 <!-- POPULAR ROUTES -->
 <section data-aos="fade-up" class="p-6 sm:p-20 pt-14">
@@ -131,10 +132,10 @@
     <p class="uppercase font-semibold text-gray-500 text-sm tracking-widest mb-2">🇮🇳 Best Deals</p>
     <h2 class="font-volkhov font-bold text-4xl sm:text-5xl text-[#181E4B]">Popular Indian Routes</h2>
   </div>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div id="flight-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
     <!-- DEL → GOI -->
-    <div class="bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
+    <div data-from="del delhi" data-to="goi goa" class="flight-card bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
       <div class="flex items-center justify-between mb-6">
         <div class="text-center">
           <p class="text-2xl font-bold text-slate-800 font-volkhov">DEL</p>
@@ -153,12 +154,12 @@
       <div class="flex justify-between items-center border-t border-slate-100 pt-4">
         <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">2h 30min</p></div>
         <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹3,500</p></div>
-        <a href="bookings.html" class="mat-btn mat-btn-primary ripple">Book</a>
+        <a href="bookings.html?type=flight&from=DEL+%28New+Delhi%29&to=GOI+%28Goa%29&price=%E2%82%B93%2C500&duration=2h+30min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
       </div>
     </div>
 
     <!-- BOM → CCU -->
-    <div class="bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
+    <div data-from="bom bombay mumbai" data-to="ccu kolkata calcutta" class="flight-card bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
       <div class="flex items-center justify-between mb-6">
         <div class="text-center">
           <p class="text-2xl font-bold text-slate-800 font-volkhov">BOM</p>
@@ -177,12 +178,12 @@
       <div class="flex justify-between items-center border-t border-slate-100 pt-4">
         <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">2h 15min</p></div>
         <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹4,200</p></div>
-        <a href="bookings.html" class="mat-btn mat-btn-primary ripple">Book</a>
+        <a href="bookings.html?type=flight&from=BOM+%28Mumbai%29&to=CCU+%28Kolkata%29&price=%E2%82%B94%2C200&duration=2h+15min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
       </div>
     </div>
 
     <!-- BLR → DEL -->
-    <div class="bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
+    <div data-from="blr bangalore bengaluru" data-to="del delhi" class="flight-card bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
       <div class="flex items-center justify-between mb-6">
         <div class="text-center">
           <p class="text-2xl font-bold text-slate-800 font-volkhov">BLR</p>
@@ -201,12 +202,12 @@
       <div class="flex justify-between items-center border-t border-slate-100 pt-4">
         <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">2h 45min</p></div>
         <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹3,800</p></div>
-        <a href="bookings.html" class="mat-btn mat-btn-primary ripple">Book</a>
+        <a href="bookings.html?type=flight&from=BLR+%28Bangalore%29&to=DEL+%28New+Delhi%29&price=%E2%82%B93%2C800&duration=2h+45min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
       </div>
     </div>
 
-    <!-- DEL → IXB (Andaman via Port Blair) -->
-    <div class="bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
+    <!-- DEL → IXZ (Andaman) -->
+    <div data-from="del delhi" data-to="ixz andaman port blair" class="flight-card bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
       <div class="flex items-center justify-between mb-6">
         <div class="text-center">
           <p class="text-2xl font-bold text-slate-800 font-volkhov">DEL</p>
@@ -225,12 +226,12 @@
       <div class="flex justify-between items-center border-t border-slate-100 pt-4">
         <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">3h 45min</p></div>
         <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹8,500</p></div>
-        <a href="bookings.html" class="mat-btn mat-btn-primary ripple">Book</a>
+        <a href="bookings.html?type=flight&from=DEL+%28New+Delhi%29&to=IXZ+%28Andaman%29&price=%E2%82%B98%2C500&duration=3h+45min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
       </div>
     </div>
 
     <!-- MAA → COK -->
-    <div class="bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
+    <div data-from="maa madras chennai" data-to="cok cochin kochi" class="flight-card bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
       <div class="flex items-center justify-between mb-6">
         <div class="text-center">
           <p class="text-2xl font-bold text-slate-800 font-volkhov">MAA</p>
@@ -249,12 +250,12 @@
       <div class="flex justify-between items-center border-t border-slate-100 pt-4">
         <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">1h 15min</p></div>
         <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹2,800</p></div>
-        <a href="bookings.html" class="mat-btn mat-btn-primary ripple">Book</a>
+        <a href="bookings.html?type=flight&from=MAA+%28Chennai%29&to=COK+%28Kochi%29&price=%E2%82%B92%2C800&duration=1h+15min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
       </div>
     </div>
 
     <!-- BOM → JAI -->
-    <div class="bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
+    <div data-from="bom bombay mumbai" data-to="jai jaipur" class="flight-card bg-white rounded-[2rem] border border-slate-100 p-7 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500 cursor-pointer">
       <div class="flex items-center justify-between mb-6">
         <div class="text-center">
           <p class="text-2xl font-bold text-slate-800 font-volkhov">BOM</p>
@@ -273,10 +274,18 @@
       <div class="flex justify-between items-center border-t border-slate-100 pt-4">
         <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">1h 45min</p></div>
         <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹3,200</p></div>
-        <a href="bookings.html" class="mat-btn mat-btn-primary ripple">Book</a>
+        <a href="bookings.html?type=flight&from=BOM+%28Mumbai%29&to=JAI+%28Jaipur%29&price=%E2%82%B93%2C200&duration=1h+45min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
       </div>
     </div>
 
+  </div>
+
+  <!-- No results -->
+  <div id="flight-no-results" class="hidden text-center py-16">
+    <p class="text-5xl mb-4">✈️</p>
+    <p class="font-volkhov text-2xl font-bold text-slate-700">No routes found</p>
+    <p class="text-slate-400 mt-2">Try different city names or check our popular routes above.</p>
+    <button onclick="clearFlightSearch()" class="mt-6 mat-btn mat-btn-primary">Show All Routes</button>
   </div>
 </section>
 
@@ -285,9 +294,52 @@
   © 2024 Voyage. All rights reserved. Made with 🥰
 </footer>
 
+<script src="js/api.js?v=5"></script>
+<script src="js/auth-nav.js?v=3"></script>
 <script>
   document.getElementById('mob-btn').addEventListener('click', () => {
     document.getElementById('mob-menu').classList.toggle('hidden');
+  });
+
+  // ── Flights Search Logic ───────────────────────────────────
+  function filterFlights() {
+    const fromQ = (document.getElementById('flight-from').value || '').toLowerCase().trim();
+    const toQ   = (document.getElementById('flight-to').value   || '').toLowerCase().trim();
+    const cards = document.querySelectorAll('.flight-card');
+    let visible = 0;
+
+    cards.forEach(card => {
+      const from = card.dataset.from || '';
+      const to   = card.dataset.to   || '';
+      const matchFrom = !fromQ || from.includes(fromQ);
+      const matchTo   = !toQ   || to.includes(toQ);
+      const match = matchFrom && matchTo;
+      card.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+
+    document.getElementById('flight-no-results').classList.toggle('hidden', visible > 0);
+    document.getElementById('flight-grid').style.display = visible === 0 ? 'none' : '';
+  }
+
+  function searchFlights() {
+    filterFlights();
+    document.getElementById('flight-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function clearFlightSearch() {
+    document.getElementById('flight-from').value = '';
+    document.getElementById('flight-to').value = '';
+    filterFlights();
+  }
+
+  // Live filtering
+  document.getElementById('flight-from').addEventListener('input', filterFlights);
+  document.getElementById('flight-to').addEventListener('input', filterFlights);
+
+  // Enter key
+  ['flight-from','flight-to'].forEach(id => {
+    document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') searchFlights(); });
   });
 </script>
 

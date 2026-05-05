@@ -85,12 +85,13 @@
 <!-- SEARCH BAR -->
 <section data-aos="fade-up" class="px-6 sm:px-20 -mt-8 relative z-10">
   <div class="hero-search glass-xl p-6 flex flex-col sm:flex-row gap-4 max-w-4xl mx-auto">
-    <input id="dest-input" type="text" placeholder="Where in India are you going?" class="flex-1 border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-700 outline-none focus:border-orange-400 transition-colors">
-    <input type="date" class="border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-600 outline-none focus:border-orange-400 transition-colors">
-    <input type="date" class="border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-600 outline-none focus:border-orange-400 transition-colors">
-    <a href="bookings.html" class="mat-btn mat-btn-primary ripple whitespace-nowrap">Search Hotels</a>
+    <input id="hotel-search" type="text" placeholder="Search hotel, city or state..." class="flex-1 border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-700 outline-none focus:border-orange-400 transition-colors">
+    <input id="hotel-checkin" type="date" class="border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-600 outline-none focus:border-orange-400 transition-colors">
+    <input id="hotel-checkout" type="date" class="border border-slate-200 rounded-xl px-4 py-3 font-poppins text-slate-600 outline-none focus:border-orange-400 transition-colors">
+    <button onclick="searchHotels()" class="mat-btn mat-btn-primary ripple whitespace-nowrap">Search Hotels</button>
   </div>
 </section>
+
 
 <!-- HOTEL CARDS -->
 <section data-aos="fade-up" class="p-6 sm:p-20 pt-12">
@@ -98,10 +99,10 @@
     <p class="uppercase font-semibold text-gray-500 text-sm tracking-widest mb-2">🇮🇳 Top Picks</p>
     <h2 class="font-volkhov font-bold text-4xl sm:text-5xl text-[#181E4B]">Popular Indian Hotels</h2>
   </div>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+  <div id="hotel-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
     <!-- Taj Mahal Palace -->
-    <div data-aos="fade-up" data-aos-delay="300" class="mat-card flex flex-col overflow-hidden cursor-pointer group">
+    <div data-hotel-name="taj mahal palace" data-hotel-loc="mumbai maharashtra" data-aos="fade-up" data-aos-delay="300" class="hotel-card mat-card flex flex-col overflow-hidden cursor-pointer group">
       <div class="overflow-hidden rounded-t-[2rem] h-56 relative group">
         <img src="images/103705059.jpg" alt="Taj Mahal Palace" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
       </div>
@@ -115,12 +116,12 @@
         </div>
         <div class="flex gap-1 text-amber-400">★★★★★</div>
         <p class="text-slate-500 text-sm">Iconic heritage hotel by the Gateway of India. Award-winning restaurants, spa and harbour views.</p>
-        <a href="bookings.html" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+        <a href="bookings.html?type=hotel&name=Taj+Mahal+Palace&location=Mumbai%2C+Maharashtra&price=%E2%82%B925%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
       </div>
     </div>
 
     <!-- Umaid Bhawan Palace -->
-    <div data-aos="fade-up" data-aos-delay="200" class="mat-card flex flex-col overflow-hidden cursor-pointer group">
+    <div data-hotel-name="umaid bhawan palace" data-hotel-loc="jodhpur rajasthan" data-aos="fade-up" data-aos-delay="200" class="hotel-card mat-card flex flex-col overflow-hidden cursor-pointer group">
       <div class="overflow-hidden rounded-t-[2rem] h-56 relative group">
         <img src="images/756523266.jpg" alt="Umaid Bhawan Palace" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
       </div>
@@ -134,12 +135,12 @@
         </div>
         <div class="flex gap-1 text-amber-400">★★★★★</div>
         <p class="text-slate-500 text-sm">A living palace with art deco grandeur, marble suites, royal banquet halls and a stunning pool.</p>
-        <a href="bookings.html" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+        <a href="bookings.html?type=hotel&name=Umaid+Bhawan+Palace&location=Jodhpur%2C+Rajasthan&price=%E2%82%B945%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
       </div>
     </div>
 
     <!-- The Leela Goa -->
-    <div data-aos="fade-up" data-aos-delay="400" class="mat-card flex flex-col overflow-hidden cursor-pointer group">
+    <div data-hotel-name="the leela resort" data-hotel-loc="north goa goa" data-aos="fade-up" data-aos-delay="400" class="hotel-card mat-card flex flex-col overflow-hidden cursor-pointer group">
       <div class="overflow-hidden rounded-t-[2rem] h-56 relative group">
         <img src="images/11416_0_theleelahotelgoa_fsa-g.jpg" alt="The Leela Resort" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
       </div>
@@ -153,12 +154,12 @@
         </div>
         <div class="flex gap-1 text-amber-400">★★★★★</div>
         <p class="text-slate-500 text-sm">Nestled on Mobor beach — lush gardens, infinity pool, water sports and Goan cuisine.</p>
-        <a href="bookings.html" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+        <a href="bookings.html?type=hotel&name=The+Leela+Resort&location=North+Goa%2C+Goa&price=%E2%82%B915%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
       </div>
     </div>
 
     <!-- Wildflower Hall Manali -->
-    <div data-aos="fade-up" data-aos-delay="300" class="mat-card flex flex-col overflow-hidden cursor-pointer group">
+    <div data-hotel-name="wildflower hall" data-hotel-loc="shimla himachal pradesh" data-aos="fade-up" data-aos-delay="300" class="hotel-card mat-card flex flex-col overflow-hidden cursor-pointer group">
       <div class="overflow-hidden rounded-t-[2rem] h-56 relative group">
         <img src="images/WildflowerHall1.jpg" alt="Wildflower Hall" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
       </div>
@@ -172,12 +173,12 @@
         </div>
         <div class="flex gap-1 text-amber-400">★★★★★</div>
         <p class="text-slate-500 text-sm">Perched at 8,250 ft in cedar forests. Breathtaking Himalayan views, heated pool and spa.</p>
-        <a href="bookings.html" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+        <a href="bookings.html?type=hotel&name=Wildflower+Hall&location=Shimla%2C+Himachal+Pradesh&price=%E2%82%B930%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
       </div>
     </div>
 
     <!-- ITC Grand Chola -->
-    <div data-aos="fade-up" data-aos-delay="400" class="mat-card flex flex-col overflow-hidden cursor-pointer group">
+    <div data-hotel-name="itc grand chola" data-hotel-loc="chennai tamil nadu" data-aos="fade-up" data-aos-delay="400" class="hotel-card mat-card flex flex-col overflow-hidden cursor-pointer group">
       <div class="overflow-hidden rounded-t-[2rem] h-56 relative group">
         <img src="images/itc-grand-chola-chennai.jpg" alt="ITC Grand Chola" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
       </div>
@@ -191,12 +192,12 @@
         </div>
         <div class="flex gap-1 text-amber-400">★★★★★</div>
         <p class="text-slate-500 text-sm">South India's grandest hotel inspired by Chola dynasty. 600 rooms, largest spa in Asia, fine dining.</p>
-        <a href="bookings.html" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+        <a href="bookings.html?type=hotel&name=ITC+Grand+Chola&location=Chennai%2C+Tamil+Nadu&price=%E2%82%B920%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
       </div>
     </div>
 
     <!-- Kumarakom Lake Resort -->
-    <div data-aos="fade-up" data-aos-delay="400" class="mat-card flex flex-col overflow-hidden cursor-pointer group">
+    <div data-hotel-name="kumarakom lake resort" data-hotel-loc="kumarakom kerala" data-aos="fade-up" data-aos-delay="400" class="hotel-card mat-card flex flex-col overflow-hidden cursor-pointer group">
       <div class="overflow-hidden rounded-t-[2rem] h-56 relative group">
         <img src="images/Kumarakom-Lake-Resort.jpg" alt="Kumarakom Lake Resort" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
       </div>
@@ -210,10 +211,18 @@
         </div>
         <div class="flex gap-1 text-amber-400">★★★★★</div>
         <p class="text-slate-500 text-sm">Luxury heritage villas on Vembanad Lake. Private boat rides, Ayurveda treatments, lush nature.</p>
-        <a href="bookings.html" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+        <a href="bookings.html?type=hotel&name=Kumarakom+Lake+Resort&location=Kumarakom%2C+Kerala&price=%E2%82%B918%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
       </div>
     </div>
 
+  </div>
+
+  <!-- No results message -->
+  <div id="hotel-no-results" class="hidden text-center py-16">
+    <p class="text-5xl mb-4">🔍</p>
+    <p class="font-volkhov text-2xl font-bold text-slate-700">No hotels found</p>
+    <p class="text-slate-400 mt-2">Try searching for a different city or hotel name.</p>
+    <button onclick="clearHotelSearch()" class="mt-6 mat-btn mat-btn-primary">Show All Hotels</button>
   </div>
 </section>
 
@@ -222,10 +231,48 @@
   © 2024 Voyage. All rights reserved. Made with 🥰
 </footer>
 
+<script src="js/api.js?v=5"></script>
+<script src="js/auth-nav.js?v=3"></script>
 <script>
   document.getElementById('mob-btn').addEventListener('click', () => {
     document.getElementById('mob-menu').classList.toggle('hidden');
   });
+
+  // ── Hotel Search Logic ────────────────────────────────────────
+  const hotelSearchInput = document.getElementById('hotel-search');
+
+  function filterHotels(query) {
+    const q = query.toLowerCase().trim();
+    const cards = document.querySelectorAll('.hotel-card');
+    let visible = 0;
+    cards.forEach(card => {
+      const name = card.dataset.hotelName || '';
+      const loc  = card.dataset.hotelLoc  || '';
+      const match = !q || name.includes(q) || loc.includes(q);
+      card.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    document.getElementById('hotel-no-results').classList.toggle('hidden', visible > 0);
+    document.getElementById('hotel-grid').classList.toggle('hidden', visible === 0);
+  }
+
+  function searchHotels() {
+    const q = hotelSearchInput.value;
+    filterHotels(q);
+    // Scroll to results
+    document.getElementById('hotel-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function clearHotelSearch() {
+    hotelSearchInput.value = '';
+    filterHotels('');
+  }
+
+  // Live filtering as user types
+  hotelSearchInput.addEventListener('input', () => filterHotels(hotelSearchInput.value));
+
+  // Allow pressing Enter to search
+  hotelSearchInput.addEventListener('keydown', e => { if (e.key === 'Enter') searchHotels(); });
 </script>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
