@@ -154,7 +154,7 @@
       <div class="flex justify-between items-center border-t border-slate-100 pt-4">
         <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">2h 30min</p></div>
         <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹3,500</p></div>
-        <a href="bookings.html?type=flight&from=DEL+%28New+Delhi%29&to=GOI+%28Goa%29&price=%E2%82%B93%2C500&duration=2h+30min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
+        <a id="book-del-goi" href="bookings.html?type=flight&from=DEL+%28New+Delhi%29&to=GOI+%28Goa%29&price=%E2%82%B93%2C500&duration=2h+30min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
       </div>
     </div>
 
@@ -178,7 +178,7 @@
       <div class="flex justify-between items-center border-t border-slate-100 pt-4">
         <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">2h 15min</p></div>
         <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹4,200</p></div>
-        <a href="bookings.html?type=flight&from=BOM+%28Mumbai%29&to=CCU+%28Kolkata%29&price=%E2%82%B94%2C200&duration=2h+15min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
+        <a id="book-bom-ccu" href="bookings.html?type=flight&from=BOM+%28Mumbai%29&to=CCU+%28Kolkata%29&price=%E2%82%B94%2C200&duration=2h+15min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
       </div>
     </div>
 
@@ -202,7 +202,7 @@
       <div class="flex justify-between items-center border-t border-slate-100 pt-4">
         <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">2h 45min</p></div>
         <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹3,800</p></div>
-        <a href="bookings.html?type=flight&from=BLR+%28Bangalore%29&to=DEL+%28New+Delhi%29&price=%E2%82%B93%2C800&duration=2h+45min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
+        <a id="book-blr-del" href="bookings.html?type=flight&from=BLR+%28Bangalore%29&to=DEL+%28New+Delhi%29&price=%E2%82%B93%2C800&duration=2h+45min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
       </div>
     </div>
 
@@ -226,7 +226,7 @@
       <div class="flex justify-between items-center border-t border-slate-100 pt-4">
         <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">3h 45min</p></div>
         <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹8,500</p></div>
-        <a href="bookings.html?type=flight&from=DEL+%28New+Delhi%29&to=IXZ+%28Andaman%29&price=%E2%82%B98%2C500&duration=3h+45min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
+        <a id="book-del-ixz" href="bookings.html?type=flight&from=DEL+%28New+Delhi%29&to=IXZ+%28Andaman%29&price=%E2%82%B98%2C500&duration=3h+45min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
       </div>
     </div>
 
@@ -250,7 +250,7 @@
       <div class="flex justify-between items-center border-t border-slate-100 pt-4">
         <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">1h 15min</p></div>
         <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹2,800</p></div>
-        <a href="bookings.html?type=flight&from=MAA+%28Chennai%29&to=COK+%28Kochi%29&price=%E2%82%B92%2C800&duration=1h+15min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
+        <a id="book-maa-cok" href="bookings.html?type=flight&from=MAA+%28Chennai%29&to=COK+%28Kochi%29&price=%E2%82%B92%2C800&duration=1h+15min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
       </div>
     </div>
 
@@ -274,7 +274,7 @@
       <div class="flex justify-between items-center border-t border-slate-100 pt-4">
         <div><p class="text-slate-500 text-xs">Duration</p><p class="font-semibold text-slate-700">1h 45min</p></div>
         <div><p class="text-slate-500 text-xs">From</p><p class="font-bold text-orange-500 text-lg">₹3,200</p></div>
-        <a href="bookings.html?type=flight&from=BOM+%28Mumbai%29&to=JAI+%28Jaipur%29&price=%E2%82%B93%2C200&duration=1h+45min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
+        <a id="book-bom-jai" href="bookings.html?type=flight&from=BOM+%28Mumbai%29&to=JAI+%28Jaipur%29&price=%E2%82%B93%2C200&duration=1h+45min" class="mat-btn mat-btn-primary ripple book-flight-btn">Book</a>
       </div>
     </div>
 
@@ -324,6 +324,23 @@
 
   function searchFlights() {
     filterFlights();
+    const date = document.getElementById('flight-date').value;
+    const pax  = document.getElementById('flight-pax').value;
+
+    // Update each visible Book link to include date & passengers
+    document.querySelectorAll('.flight-card').forEach(card => {
+      if (card.style.display === 'none') return;
+      const link = card.querySelector('a.book-flight-btn');
+      if (!link) return;
+      // Strip old date/pax params
+      let baseHref = link.getAttribute('href')
+        .replace(/&date=[^&]*/g, '')
+        .replace(/&passengers=[^&]*/g, '');
+      if (date) baseHref += '&date=' + encodeURIComponent(date);
+      if (pax)  baseHref += '&passengers=' + encodeURIComponent(pax);
+      link.setAttribute('href', baseHref);
+    });
+
     document.getElementById('flight-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 

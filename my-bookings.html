@@ -48,9 +48,15 @@
 </header>
 
 <main class="flex-grow p-6 sm:p-20">
-  <div class="max-w-5xl mx-auto space-y-8 font-poppins">
-    <h1 class="font-volkhov text-4xl sm:text-5xl font-bold text-[#181E4B]">My Bookings</h1>
-    <p class="text-slate-500 text-lg">Manage your upcoming and past trips.</p>
+  <div class="max-w-6xl mx-auto space-y-8 font-poppins">
+
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      <div>
+        <h1 class="font-volkhov text-4xl sm:text-5xl font-bold text-[#181E4B]">My Bookings</h1>
+        <p class="text-slate-500 text-lg mt-1">Manage your upcoming and past trips.</p>
+      </div>
+      <a href="bookings.html" class="mat-btn mat-btn-primary shrink-0">+ New Booking</a>
+    </div>
 
     <!-- Table Container -->
     <div class="bg-white rounded-[2rem] shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden">
@@ -59,11 +65,13 @@
           <thead class="text-xs text-slate-400 uppercase bg-slate-50 font-bold border-b border-slate-100">
             <tr>
               <th class="px-6 py-4">ID</th>
-              <th class="px-6 py-4">Destination</th>
+              <th class="px-6 py-4">Type</th>
+              <th class="px-6 py-4">Booking</th>
               <th class="px-6 py-4">Travellers</th>
-              <th class="px-6 py-4">Departure</th>
+              <th class="px-6 py-4">Date</th>
               <th class="px-6 py-4">Amount</th>
               <th class="px-6 py-4">Status</th>
+              <th class="px-6 py-4">Action</th>
             </tr>
           </thead>
           <tbody id="bookings-tbody" class="divide-y divide-slate-100">
@@ -85,12 +93,47 @@
   © 2024 Voyage. All rights reserved. Made with 🥰
 </footer>
 
-<script src="js/api.js?v=5"></script>
+<script src="js/api.js?v=6"></script>
 <script src="js/auth-nav.js?v=3"></script>
 <script>
   document.getElementById('mob-btn').addEventListener('click', () => {
     document.getElementById('mob-menu').classList.toggle('hidden');
   });
+
+  // ── Type badge helper ──────────────────────────────────────────────────────
+  function typeBadge(type) {
+    const map = {
+      destination: { icon: '🗺️', label: 'Tour',   cls: 'bg-orange-50 text-orange-600 border-orange-200' },
+      hotel:       { icon: '🏨', label: 'Hotel',  cls: 'bg-emerald-50 text-emerald-600 border-emerald-200' },
+      flight:      { icon: '✈️', label: 'Flight', cls: 'bg-blue-50 text-blue-600 border-blue-200' },
+    };
+    const t = map[type] || map.destination;
+    return `<span class="border ${t.cls} px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide inline-flex items-center gap-1">${t.icon} ${t.label}</span>`;
+  }
+
+  // ── Cancel handler ─────────────────────────────────────────────────────────
+  async function doCancel(id, btn) {
+    if (!confirm('Are you sure you want to cancel booking #' + id + '?\nThis action cannot be undone.')) return;
+    btn.textContent = 'Cancelling…';
+    btn.disabled = true;
+    try {
+      const res = await cancelBooking(id);
+      if (res.success) {
+        const row = btn.closest('tr');
+        row.querySelector('.status-cell').innerHTML =
+          '<span class="bg-red-50 text-red-600 border border-red-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Cancelled</span>';
+        btn.remove();
+      } else {
+        alert('❌ ' + (res.error || 'Could not cancel booking.'));
+        btn.textContent = 'Cancel';
+        btn.disabled = false;
+      }
+    } catch (e) {
+      alert('❌ Network error. Please try again.');
+      btn.textContent = 'Cancel';
+      btn.disabled = false;
+    }
+  }
 
   (async function loadMyBookings() {
     try {
@@ -99,38 +142,60 @@
         window.location.href = 'login.html';
         return;
       }
-      
+
       const list = await getBookings();
       const tbody = document.getElementById('bookings-tbody');
       const emptyState = document.getElementById('empty-state');
-      
+
       if (!list || list.length === 0) {
         emptyState.classList.remove('hidden');
-      } else {
-        list.forEach(item => {
-          const tr = document.createElement('tr');
-          tr.className = 'hover:bg-slate-50/50 transition-colors';
-          
-          let statusBadge = '';
-          if (item.status === 'Confirmed') statusBadge = '<span class="bg-emerald-50 text-emerald-600 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Confirmed</span>';
-          else if (item.status === 'Pending') statusBadge = '<span class="bg-amber-50 text-amber-600 border border-amber-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Pending</span>';
-          else statusBadge = '<span class="bg-red-50 text-red-600 border border-red-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Cancelled</span>';
-
-          tr.innerHTML = `
-            <td class="px-6 py-4 font-medium text-slate-500 font-mono">#${item.id}</td>
-            <td class="px-6 py-4 font-bold text-slate-800">${item.destination_name}</td>
-            <td class="px-6 py-4">${item.travellers} Person(s)</td>
-            <td class="px-6 py-4">${item.departure_date ? new Date(item.departure_date).toLocaleDateString() : 'N/A'}</td>
-            <td class="px-6 py-4 font-bold text-indigo-600">${item.amount}</td>
-            <td class="px-6 py-4">${statusBadge}</td>
-          `;
-          tbody.appendChild(tr);
-        });
+        return;
       }
+
+      list.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50/50 transition-colors';
+
+        let statusBadge = '';
+        if (item.status === 'Confirmed')
+          statusBadge = '<span class="bg-emerald-50 text-emerald-600 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Confirmed</span>';
+        else if (item.status === 'Pending')
+          statusBadge = '<span class="bg-amber-50 text-amber-600 border border-amber-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Pending</span>';
+        else
+          statusBadge = '<span class="bg-red-50 text-red-600 border border-red-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Cancelled</span>';
+
+        const canCancel = item.status !== 'Cancelled';
+        const cancelBtn = canCancel
+          ? `<button onclick="doCancel(${item.id}, this)"
+               class="text-red-500 hover:text-red-700 border border-red-200 hover:border-red-400 bg-red-50 hover:bg-red-100 font-semibold text-xs px-3 py-1.5 rounded-lg transition-all">
+               Cancel
+             </button>`
+          : '<span class="text-slate-300 text-xs">—</span>';
+
+        const bookingLabel = item.destination_name || '—';
+        const bookingDate  = item.departure_date
+          ? new Date(item.departure_date).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })
+          : (item.checkin_date
+              ? new Date(item.checkin_date).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' })
+              : 'N/A');
+
+        tr.innerHTML = `
+          <td class="px-6 py-4 font-medium text-slate-500 font-mono">#${item.id}</td>
+          <td class="px-6 py-4">${typeBadge(item.booking_type || 'destination')}</td>
+          <td class="px-6 py-4 font-bold text-slate-800" style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${bookingLabel}</td>
+          <td class="px-6 py-4">${item.travellers} Person(s)</td>
+          <td class="px-6 py-4">${bookingDate}</td>
+          <td class="px-6 py-4 font-bold text-indigo-600">${item.amount}</td>
+          <td class="px-6 py-4 status-cell">${statusBadge}</td>
+          <td class="px-6 py-4">${cancelBtn}</td>
+        `;
+        tbody.appendChild(tr);
+      });
     } catch (e) {
       console.error(e);
-      document.getElementById('empty-state').innerHTML = '<p class="text-red-500">Failed to load bookings. Please try again later.</p>';
-      document.getElementById('empty-state').classList.remove('hidden');
+      const es = document.getElementById('empty-state');
+      es.innerHTML = '<p class="text-red-500 text-lg">Failed to load bookings. Please try again later.</p>';
+      es.classList.remove('hidden');
     }
   })();
 </script>

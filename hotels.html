@@ -116,7 +116,7 @@
         </div>
         <div class="flex gap-1 text-amber-400">★★★★★</div>
         <p class="text-slate-500 text-sm">Iconic heritage hotel by the Gateway of India. Award-winning restaurants, spa and harbour views.</p>
-        <a href="bookings.html?type=hotel&name=Taj+Mahal+Palace&location=Mumbai%2C+Maharashtra&price=%E2%82%B925%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+        <a id="book-taj" href="bookings.html?type=hotel&name=Taj+Mahal+Palace&location=Mumbai%2C+Maharashtra&price=%E2%82%B925%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
       </div>
     </div>
 
@@ -135,7 +135,7 @@
         </div>
         <div class="flex gap-1 text-amber-400">★★★★★</div>
         <p class="text-slate-500 text-sm">A living palace with art deco grandeur, marble suites, royal banquet halls and a stunning pool.</p>
-        <a href="bookings.html?type=hotel&name=Umaid+Bhawan+Palace&location=Jodhpur%2C+Rajasthan&price=%E2%82%B945%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+        <a id="book-umaid" href="bookings.html?type=hotel&name=Umaid+Bhawan+Palace&location=Jodhpur%2C+Rajasthan&price=%E2%82%B945%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
       </div>
     </div>
 
@@ -154,7 +154,7 @@
         </div>
         <div class="flex gap-1 text-amber-400">★★★★★</div>
         <p class="text-slate-500 text-sm">Nestled on Mobor beach — lush gardens, infinity pool, water sports and Goan cuisine.</p>
-        <a href="bookings.html?type=hotel&name=The+Leela+Resort&location=North+Goa%2C+Goa&price=%E2%82%B915%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+        <a id="book-leela" href="bookings.html?type=hotel&name=The+Leela+Resort&location=North+Goa%2C+Goa&price=%E2%82%B915%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
       </div>
     </div>
 
@@ -173,7 +173,7 @@
         </div>
         <div class="flex gap-1 text-amber-400">★★★★★</div>
         <p class="text-slate-500 text-sm">Perched at 8,250 ft in cedar forests. Breathtaking Himalayan views, heated pool and spa.</p>
-        <a href="bookings.html?type=hotel&name=Wildflower+Hall&location=Shimla%2C+Himachal+Pradesh&price=%E2%82%B930%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+        <a id="book-wildflower" href="bookings.html?type=hotel&name=Wildflower+Hall&location=Shimla%2C+Himachal+Pradesh&price=%E2%82%B930%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
       </div>
     </div>
 
@@ -192,7 +192,7 @@
         </div>
         <div class="flex gap-1 text-amber-400">★★★★★</div>
         <p class="text-slate-500 text-sm">South India's grandest hotel inspired by Chola dynasty. 600 rooms, largest spa in Asia, fine dining.</p>
-        <a href="bookings.html?type=hotel&name=ITC+Grand+Chola&location=Chennai%2C+Tamil+Nadu&price=%E2%82%B920%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+        <a id="book-itc" href="bookings.html?type=hotel&name=ITC+Grand+Chola&location=Chennai%2C+Tamil+Nadu&price=%E2%82%B920%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
       </div>
     </div>
 
@@ -211,7 +211,7 @@
         </div>
         <div class="flex gap-1 text-amber-400">★★★★★</div>
         <p class="text-slate-500 text-sm">Luxury heritage villas on Vembanad Lake. Private boat rides, Ayurveda treatments, lush nature.</p>
-        <a href="bookings.html?type=hotel&name=Kumarakom+Lake+Resort&location=Kumarakom%2C+Kerala&price=%E2%82%B918%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
+        <a id="book-kumarakom" href="bookings.html?type=hotel&name=Kumarakom+Lake+Resort&location=Kumarakom%2C+Kerala&price=%E2%82%B918%2C000%2Fnight&stars=5" class="mat-btn mat-btn-primary ripple w-full mt-2">Book Now</a>
       </div>
     </div>
 
@@ -257,8 +257,24 @@
   }
 
   function searchHotels() {
-    const q = hotelSearchInput.value;
+    const q        = hotelSearchInput.value;
+    const checkin  = document.getElementById('hotel-checkin').value;
+    const checkout = document.getElementById('hotel-checkout').value;
+
+    // Filter cards by name/location
     filterHotels(q);
+
+    // Append date params to each visible Book Now link
+    document.querySelectorAll('.hotel-card').forEach(card => {
+      const link = card.querySelector('a[id^="book-"]');
+      if (!link) return;
+      const baseHref = link.getAttribute('href').split('&checkin=')[0]; // strip old dates
+      let newHref = baseHref;
+      if (checkin)  newHref += '&checkin='  + encodeURIComponent(checkin);
+      if (checkout) newHref += '&checkout=' + encodeURIComponent(checkout);
+      link.setAttribute('href', newHref);
+    });
+
     // Scroll to results
     document.getElementById('hotel-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }

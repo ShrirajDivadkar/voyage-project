@@ -439,6 +439,31 @@
   function applyURLParams() {
     const banner = document.getElementById('booking-type-banner');
 
+    // Pre-fill travellers / passengers from URL
+    const urlPax = params.get('passengers');
+    if (urlPax) {
+      const paxSel = document.getElementById('bk-travellers');
+      const validVals = ['1','2','3','4','5'];
+      if (validVals.includes(urlPax)) paxSel.value = urlPax;
+      const labels = { '1':'1 Person','2':'2 People','3':'3 People','4':'4 People','5':'5+ People' };
+      document.getElementById('sum-travellers').textContent = labels[paxSel.value] || paxSel.value;
+    }
+
+    // Auto-click a date slot if a date was passed in URL
+    const urlDate = params.get('date');
+    if (urlDate) {
+      const matchSlot = document.querySelector(`.date-slot[data-value="${urlDate}"]`);
+      if (matchSlot) {
+        matchSlot.click();
+      } else {
+        // If the exact date isn't one of the 3 slots, set hidden field directly
+        document.getElementById('bk-dep').value = urlDate;
+        const d = new Date(urlDate + 'T00:00:00');
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        document.getElementById('sum-date').textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+      }
+    }
+
     if (bookingType === 'destination') {
       const id = params.get('id');
       const dest = _dests.find(d => String(d.id) === String(id));
@@ -487,10 +512,12 @@
     }
 
     else if (bookingType === 'hotel') {
-      const name = params.get('name') || '';
+      const name     = params.get('name') || '';
       const location = params.get('location') || '';
-      const price = params.get('price') || '';
-      const stars = params.get('stars') || '5';
+      const price    = params.get('price') || '';
+      const stars    = params.get('stars') || '5';
+      const checkin  = params.get('checkin') || '';
+      const checkout = params.get('checkout') || '';
 
       // Hide destination dropdown, show hotel text info
       const wrapper = document.getElementById('dest-select-wrapper');
@@ -500,13 +527,18 @@
           class="w-full border border-emerald-200 bg-emerald-50 rounded-xl px-4 py-3 text-slate-700 outline-none font-semibold">
       `;
 
+      // Show check-in/out if provided
+      let subText = location + ' • ' + '★'.repeat(parseInt(stars || 5));
+      if (checkin && checkout) subText += ' • ' + checkin + ' → ' + checkout;
+      else if (checkin) subText += ' • Check-in: ' + checkin;
+
       // Banner
       banner.classList.remove('hidden');
       banner.classList.add('flex');
       document.getElementById('booking-type-icon').textContent = '🏨';
       document.getElementById('booking-type-label').textContent = 'Hotel Stay';
       document.getElementById('booking-type-title').textContent = name;
-      document.getElementById('booking-type-sub').textContent = location + ' • ' + '★'.repeat(parseInt(stars || 5));
+      document.getElementById('booking-type-sub').textContent = subText;
       const badge = document.getElementById('booking-type-badge');
       badge.textContent = '🏨 Hotel';
       badge.className = 'type-badge type-badge-hotel shrink-0';
@@ -514,7 +546,7 @@
       // Summary
       document.getElementById('sum-package').textContent = name;
       document.getElementById('sum-type').textContent = 'Hotel Stay';
-      document.getElementById('sum-duration').textContent = 'Per Night';
+      document.getElementById('sum-duration').textContent = (checkin && checkout) ? (checkin + ' – ' + checkout) : 'Per Night';
       document.getElementById('sum-total').textContent = price;
 
       const extraRow = document.getElementById('sum-extra-row');
@@ -526,9 +558,9 @@
     }
 
     else if (bookingType === 'flight') {
-      const from = params.get('from') || '';
-      const to = params.get('to') || '';
-      const price = params.get('price') || '';
+      const from     = params.get('from') || '';
+      const to       = params.get('to') || '';
+      const price    = params.get('price') || '';
       const duration = params.get('duration') || '';
 
       // Replace destination dropdown with locked flight route
@@ -617,6 +649,7 @@
 
     // Build payload depending on type
     let payload = {
+      booking_type: bookingType || 'destination',
       first_name: fname, last_name: lname,
       traveller_name: fname + ' ' + lname,
       email, phone, travellers,
@@ -627,19 +660,30 @@
     if (bookingType === 'destination') {
       const destId = parseInt(destVal);
       const dest   = _dests.find(d => d.id == destId);
+      payload.booking_type     = 'destination';
       payload.destination_id   = destId;
       payload.destination_name = dest ? dest.title : '';
       payload.duration         = dest ? dest.duration : '';
     } else if (bookingType === 'hotel') {
-      payload.destination_name = params.get('name') || destVal;
-      payload.destination_id   = 0;
-      payload.duration         = 'Per Night';
+      payload.booking_type   = 'hotel';
+      payload.hotel_name     = params.get('name') || destVal;
+      payload.hotel_location = params.get('location') || '';
+      payload.price_display  = params.get('price') || '';
+      payload.checkin_date   = params.get('checkin') || departure;
+      payload.checkout_date  = params.get('checkout') || '';
+      payload.duration       = 'Per Night';
+      payload.amount         = params.get('price') || '';
     } else if (bookingType === 'flight') {
-      payload.destination_name = (params.get('from') || '') + ' → ' + (params.get('to') || '');
-      payload.destination_id   = 0;
-      payload.duration         = params.get('duration') || '';
+      payload.booking_type  = 'flight';
+      payload.flight_from   = params.get('from') || '';
+      payload.flight_to     = params.get('to')   || '';
+      payload.price_display = params.get('price') || '';
+      payload.duration      = params.get('duration') || '';
+      payload.amount        = params.get('price') || '';
+      payload.passengers    = travellers;
     } else {
-      // Generic – try to use dropdown
+      // Generic – destination
+      payload.booking_type     = 'destination';
       const destId = parseInt(destVal) || 0;
       const dest   = _dests.find(d => d.id == destId);
       payload.destination_id   = destId;
@@ -657,8 +701,16 @@
         return;
       }
 
-      btn.classList.add('hidden');
-      document.getElementById('success-msg').classList.remove('hidden');
+      // Redirect to confirmation page
+      const confirmParams = new URLSearchParams({
+        id: res.id,
+        type: payload.booking_type,
+        name: (bookingType === 'flight') ? (payload.flight_from + ' → ' + payload.flight_to) : (payload.hotel_name || payload.destination_name || ''),
+        amount: res.amount || payload.amount || '',
+        travellers: travellers,
+        date: departure,
+      });
+      window.location.href = 'booking-confirmation.html?' + confirmParams.toString();
     } catch (e) {
       btn.textContent = 'Confirm Booking →';
       btn.disabled = false;

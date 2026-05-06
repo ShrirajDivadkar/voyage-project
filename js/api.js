@@ -115,6 +115,10 @@ async function addBooking(data) {
   return _post(API.bookings, { action: 'add', ...data });
 }
 
+async function cancelBooking(id) {
+  return _post(API.bookings, { action: 'cancel', id });
+}
+
 // ── STATS ─────────────────────────────────────────────────────
 async function getStats() {
   return _get(API.stats);

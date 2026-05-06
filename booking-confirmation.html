@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Confirmed – Voyage</title>
+  <meta name="description" content="Your booking is confirmed with Voyage. View your receipt and booking details.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: { poppins: ['Inter','sans-serif'], volkhov: ['Outfit','sans-serif'] } } }
+    }
+  </script>
+  <link rel="stylesheet" href="voyage.css">
+  <style>
+    body { margin:0; padding:0; overflow-x:hidden; }
+
+    @keyframes confettiFall {
+      0%   { transform: translateY(-60px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      top: -30px;
+      z-index: 999;
+      border-radius: 2px;
+      animation: confettiFall linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(0.6); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .scale-in { animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .slide-up { animation: slideUp 0.6s ease forwards; }
+
+    .ticket {
+      position: relative;
+      background: #fff;
+      border-radius: 2rem;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .ticket::before, .ticket::after {
+      content: '';
+      position: absolute;
+      width: 40px; height: 40px;
+      background: #f8fafc;
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .ticket::before { left: -20px; }
+    .ticket::after  { right: -20px; }
+
+    .ticket-divider {
+      border-top: 2px dashed #e2e8f0;
+      margin: 0 28px;
+    }
+
+    @media print {
+      .no-print { display: none !important; }
+      header, footer { display: none !important; }
+      body { background: white !important; }
+      .ticket::before, .ticket::after { display: none; }
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-50 via-white to-orange-50/40 text-slate-800 antialiased min-h-screen">
+
+<!-- NAV (no-print) -->
+<header class="mat-navbar sticky top-0 z-50 no-print">
+  <div class="p-5 sm:px-16 sm:py-4 flex items-center justify-between max-w-[90rem] mx-auto font-poppins">
+    <a href="index.html" class="text-[#181E4B] font-volkhov font-bold text-3xl">Voyage.</a>
+    <nav class="hidden lg:flex items-center space-x-10">
+      <a href="about.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">About</a>
+      <a href="destinations.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Destinations</a>
+      <a href="hotels.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Hotels</a>
+      <a href="flights.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">Flights</a>
+      <a href="my-bookings.html" class="text-slate-600 hover:text-orange-500 font-medium transition-colors duration-300">My Bookings</a>
+    </nav>
+  </div>
+</header>
+
+<!-- CONFIRMATION CONTENT -->
+<main class="py-16 px-6 sm:px-16">
+  <div class="max-w-2xl mx-auto">
+
+    <!-- Big Check Icon -->
+    <div class="text-center mb-10 scale-in">
+      <div class="inline-flex items-center justify-center w-28 h-28 rounded-full bg-gradient-to-br from-emerald-400 to-green-600 shadow-2xl shadow-green-300 mb-6">
+        <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <h1 class="font-volkhov text-5xl sm:text-6xl font-bold text-[#181E4B] mb-3">Booking Confirmed!</h1>
+      <p class="text-slate-500 text-lg">Your adventure is locked in. Get ready to explore! 🌍</p>
+    </div>
+
+    <!-- TICKET CARD -->
+    <div class="ticket slide-up" style="animation-delay: 0.2s">
+      <!-- Header band -->
+      <div id="ticket-header" class="p-8 pb-6 flex items-center gap-5">
+        <div id="ticket-icon" class="text-5xl w-16 h-16 flex items-center justify-center rounded-2xl shrink-0"></div>
+        <div class="flex-1 min-w-0">
+          <p id="ticket-type-label" class="text-xs font-bold uppercase tracking-widest mb-1"></p>
+          <h2 id="ticket-name" class="font-volkhov text-2xl font-bold text-slate-800 leading-tight truncate"></h2>
+          <p id="ticket-sub" class="text-slate-500 text-sm mt-0.5"></p>
+        </div>
+        <div class="text-right shrink-0">
+          <p class="text-xs text-slate-400 uppercase tracking-wide font-bold">Booking ID</p>
+          <p id="ticket-id" class="font-mono text-2xl font-bold text-orange-500">#—</p>
+        </div>
+      </div>
+
+      <div class="ticket-divider"></div>
+
+      <!-- Details grid -->
+      <div class="p-8 pt-6 grid grid-cols-2 sm:grid-cols-3 gap-6 font-poppins">
+        <div>
+          <p class="text-xs text-slate-400 uppercase tracking-wide font-bold mb-1">Date</p>
+          <p id="ticket-date" class="font-semibold text-slate-800">—</p>
+        </div>
+        <div>
+          <p class="text-xs text-slate-400 uppercase tracking-wide font-bold mb-1">Travellers</p>
+          <p id="ticket-travellers" class="font-semibold text-slate-800">—</p>
+        </div>
+        <div>
+          <p class="text-xs text-slate-400 uppercase tracking-wide font-bold mb-1">Status</p>
+          <span class="bg-amber-50 text-amber-600 border border-amber-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Pending</span>
+        </div>
+        <div class="col-span-2 sm:col-span-3">
+          <p class="text-xs text-slate-400 uppercase tracking-wide font-bold mb-1">Total Amount</p>
+          <p id="ticket-amount" class="text-3xl font-bold text-orange-500 font-volkhov">—</p>
+        </div>
+      </div>
+
+      <div class="ticket-divider"></div>
+
+      <!-- Footer -->
+      <div class="p-8 pt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/60 rounded-b-[2rem]">
+        <div class="font-poppins text-sm text-slate-500">
+          <p>✅ A confirmation email has been sent to you.</p>
+          <p class="mt-1">View and manage your bookings on <a href="my-bookings.html" class="text-orange-500 font-semibold hover:underline">My Bookings</a>.</p>
+        </div>
+        <button onclick="window.print()" class="no-print shrink-0 flex items-center gap-2 bg-[#181E4B] text-white font-bold rounded-xl px-6 py-3 hover:-translate-y-0.5 hover:shadow-lg transition-all text-sm">
+          🖨 Print Receipt
+        </button>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="no-print mt-8 flex flex-col sm:flex-row gap-4 justify-center slide-up" style="animation-delay:0.4s">
+      <a href="my-bookings.html" class="flex-1 sm:flex-none bg-gradient-to-r from-[#F1A501] to-[#FF946D] text-white font-bold rounded-xl px-8 py-4 text-center hover:-translate-y-0.5 hover:shadow-xl hover:shadow-orange-300/40 transition-all duration-300">
+        📋 View My Bookings
+      </a>
+      <a href="destinations.html" class="flex-1 sm:flex-none border-2 border-slate-200 text-slate-700 font-bold rounded-xl px-8 py-4 text-center hover:border-orange-400 hover:text-orange-500 transition-all duration-300">
+        🗺 Explore More Destinations
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<footer class="no-print text-center py-8 text-sm text-slate-500 font-poppins border-t border-slate-100">
+  © 2024 Voyage. All rights reserved. Made with 🥰
+</footer>
+
+<script>
+  // ── Read URL params ──────────────────────────────────────────────────────────
+  const params     = new URLSearchParams(window.location.search);
+  const bookingId  = params.get('id');
+  const type       = params.get('type') || 'destination';
+  const name       = decodeURIComponent(params.get('name') || '').trim();
+  const amount     = decodeURIComponent(params.get('amount') || '—');
+  const travellers = params.get('travellers') || '1';
+  const dateRaw    = params.get('date') || '';
+
+  // ── Format date ─────────────────────────────────────────────────────────────
+  function fmtDate(iso) {
+    if (!iso) return 'Not selected';
+    const d = new Date(iso + 'T00:00:00');
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  // ── Type-specific visuals ───────────────────────────────────────────────────
+  const typeConfig = {
+    destination: {
+      icon: '🗺️', label: 'Destination Tour',
+      headerBg: 'from-orange-500 to-amber-400',
+      iconBg: 'bg-orange-50', labelColor: 'text-orange-500',
+    },
+    hotel: {
+      icon: '🏨', label: 'Hotel Stay',
+      headerBg: 'from-emerald-500 to-green-400',
+      iconBg: 'bg-emerald-50', labelColor: 'text-emerald-600',
+    },
+    flight: {
+      icon: '✈️', label: 'Flight Booking',
+      headerBg: 'from-blue-500 to-sky-400',
+      iconBg: 'bg-blue-50', labelColor: 'text-blue-600',
+    },
+  };
+
+  const cfg = typeConfig[type] || typeConfig.destination;
+
+  // ── Populate ticket ─────────────────────────────────────────────────────────
+  document.getElementById('ticket-id').textContent        = bookingId ? '#' + bookingId : '#—';
+  document.getElementById('ticket-icon').textContent      = cfg.icon;
+  document.getElementById('ticket-icon').classList.add(cfg.iconBg);
+  document.getElementById('ticket-type-label').textContent = cfg.label;
+  document.getElementById('ticket-type-label').classList.add(cfg.labelColor);
+  document.getElementById('ticket-name').textContent      = name || '—';
+
+  // Sub line by type
+  const sublines = {
+    destination: 'Inclusive tour package',
+    hotel: 'Luxury stay confirmed',
+    flight: 'Seat(s) reserved',
+  };
+  document.getElementById('ticket-sub').textContent = sublines[type] || '';
+
+  document.getElementById('ticket-date').textContent       = fmtDate(dateRaw);
+  document.getElementById('ticket-travellers').textContent = travellers + ' Person' + (parseInt(travellers) > 1 ? 's' : '');
+  document.getElementById('ticket-amount').textContent     = amount;
+
+  // Header colour tint
+  const header = document.getElementById('ticket-header');
+  const gradients = {
+    destination: 'linear-gradient(135deg, #fff7ed, #ffedd5)',
+    hotel: 'linear-gradient(135deg, #f0fdf4, #dcfce7)',
+    flight: 'linear-gradient(135deg, #eff6ff, #dbeafe)',
+  };
+  header.style.background = gradients[type] || gradients.destination;
+
+  // ── Confetti ─────────────────────────────────────────────────────────────────
+  const colors = ['#F1A501','#FF946D','#4F46E5','#10B981','#EC4899','#06B6D4','#8B5CF6'];
+  for (let i = 0; i < 70; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left            = Math.random() * 100 + 'vw';
+    el.style.background      = colors[Math.floor(Math.random() * colors.length)];
+    el.style.width           = (Math.random() * 10 + 6) + 'px';
+    el.style.height          = (Math.random() * 10 + 6) + 'px';
+    el.style.animationDuration  = (Math.random() * 2.5 + 1.5) + 's';
+    el.style.animationDelay     = (Math.random() * 1.5) + 's';
+    el.style.borderRadius    = Math.random() > 0.5 ? '50%' : '2px';
+    document.body.appendChild(el);
+    // remove after animation
+    setTimeout(() => el.remove(), 5000);
+  }
+</script>
+
+</body>
+</html>
